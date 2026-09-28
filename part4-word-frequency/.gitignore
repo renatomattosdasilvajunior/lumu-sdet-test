@@ -1,0 +1,17 @@
+node_modules/
+npm-debug.log*
+*.log
+
+# Archivos de verificación temporales
+verify-*.js
+nfc.txt
+bom.txt
+vacio.txt
+salida.txt
+errores.txt
+
+# Editor y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

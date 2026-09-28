@@ -1,0 +1,12 @@
+{
+  "name": "part4-word-frequency",
+  "version": "1.0.0",
+  "description": "Cuenta la frecuencia de palabras de un archivo de texto",
+  "main": "word-frequency.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

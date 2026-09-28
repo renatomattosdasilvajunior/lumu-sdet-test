@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Failure Report: wordcounter.net</title>
+<script>
+(function(){var t;try{t=localStorage.getItem("fr-theme");}catch(e){}
+if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}
+document.documentElement.setAttribute("data-theme",t);})();
+</script>
+<style>
+:root{
+  --top:#17212E; --top-ink:#E7ECF2; --top-muted:#93A1B2;
+  --bg:#F2F4F7; --card:#FFFFFF; --ink:#18202A; --muted:#5E6978; --faint:#8A95A3;
+  --line:#E1E5EB; --line-2:#CDD3DB; --head:#F7F8FA; --hover:#F4F7FC; --sel:#EAF1FD;
+  --blue:#2F6BD8; --green:#1E8449; --green-bg:#E5F4EB; --red:#C4362C; --red-bg:#FBEAE8;
+  --orange:#C26A12; --orange-bg:#FCF0E2; --amber-bg:#FBF5E6; --amber:#8C5C07;
+  --term:#1B2430; --term-ink:#E6EDF3;
+  --sans:Inter,"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  --mono:"JetBrains Mono","Cascadia Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:6px;
+  --chip:#EEF1F5; --req:#FBFCFD; --ok-bg:#F3FAF6; --amber-line:#D9B975; --note-line:#EAD9B0;
+  --lg-bg:#EEF4FE; --lg-line:#C9DAFB; --lg-hover:#E3ECFD;
+  --tag-a-bg:#E8F0FE; --tag-a:#2256C2; --tag-a-line:#C9DAFB; --tag-m-bg:#F2ECFB; --tag-m:#6A3DB5; --tag-m-line:#DDCFF4; --card-shadow:rgba(15,23,34,.10);
+  --term-h:#243040; --on-c:#FFFFFF; --shadow:rgba(15,23,34,.18); --scrim:rgba(15,23,34,.35);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --top:#0B1017; --top-ink:#E4E9EF; --top-muted:#8D9AAA;
+  --bg:#10161D; --card:#171F29; --ink:#E3E8EE; --muted:#A0ABB8; --faint:#7B8795;
+  --line:#28323E; --line-2:#3A4655; --head:#1D2631; --hover:#1F2935; --sel:#1E3252;
+  --blue:#78A6F6; --green:#52C483; --green-bg:#15301F; --red:#F2776D; --red-bg:#3B1D1B;
+  --orange:#F2A659; --orange-bg:#3A2A16; --amber-bg:#2A2416; --amber:#E2B75E;
+  --term:#0C1117; --term-ink:#E3E8EE;
+  --chip:#26303C; --req:#1A232E; --ok-bg:#15271D; --amber-line:#8E7131; --note-line:#54462A;
+  --lg-bg:#172538; --lg-line:#2C4775; --lg-hover:#1C2E46;
+  --tag-a-bg:#1C2E4D; --tag-a:#93B8F8; --tag-a-line:#2C4775; --tag-m-bg:#2B2340; --tag-m:#C6ABF4; --tag-m-line:#453766; --card-shadow:rgba(0,0,0,.45);
+  --term-h:#161E28; --on-c:#0B1017; --shadow:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);overflow-x:hidden}
+a{color:var(--blue)}
+button{font:inherit;color:inherit}
+code{font-family:var(--mono);font-size:.88em;background:var(--chip);border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Barra superior */
+.topbar{display:flex;align-items:center;gap:14px;height:56px;padding:0 20px;background:var(--top);color:var(--top-ink)}
+.logo{width:30px;height:30px;border-radius:7px;background:var(--blue);display:grid;place-items:center;font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--on-c);flex:none}
+.proj{line-height:1.2;min-width:0}
+.proj b{display:block;font-size:14px}
+.proj span{font-size:12px;color:var(--top-muted)}
+.top-meta{display:flex;gap:18px;font-size:12px;color:var(--top-muted);white-space:nowrap}
+.top-meta b{color:var(--top-ink);font-weight:500}
+
+/* Botón de tema */
+.theme{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border:1px solid #334155;border-radius:16px;background:transparent;color:var(--top-ink);cursor:pointer;font-size:12px;white-space:nowrap}
+.theme:hover{background:rgba(255,255,255,.08)}
+.theme .i-sun{display:none}
+:root[data-theme="dark"] .theme .i-sun{display:block}
+:root[data-theme="dark"] .theme .i-moon{display:none}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:18px}
+body,.card,.grid td,.drawer,.side{transition:background-color .2s,color .2s,border-color .2s}
+
+/* Estructura */
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:calc(100vh - 56px)}
+.side{background:var(--card);border-right:1px solid var(--line);padding:18px 12px}
+.side-h{font-size:12px;color:var(--faint);margin:0 10px 8px;font-weight:600}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:var(--r);cursor:pointer;text-align:left;color:var(--muted)}
+.nav button:hover{background:var(--hover);color:var(--ink)}
+.nav button[aria-selected="true"]{background:var(--sel);color:var(--ink);font-weight:600}
+.nav svg{flex:none}
+.nav .n{margin-left:auto;font-size:12px;font-weight:600;padding:1px 8px;border-radius:10px;background:var(--chip);color:var(--muted);font-variant-numeric:tabular-nums}
+.nav button[aria-selected="true"] .n{background:var(--c);color:var(--on-c)}
+.n-cov{--c:var(--blue)} .n-pass{--c:var(--green)} .n-fail{--c:var(--red)} .n-imp{--c:var(--amber)}
+.side-box{margin:22px 10px 0;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.side-box p{margin:0 0 6px}
+.side-box b{color:var(--ink)}
+
+.main{padding:22px 26px 60px;min-width:0}
+
+/* Resumen */
+.summary{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-2px);border-color:var(--line-2);box-shadow:0 6px 18px var(--card-shadow)}
+.card .track i{transition:filter .18s ease}
+.card:hover .track i{filter:saturate(1.25) brightness(1.05)}
+.card .donut circle{transition:stroke-width .18s ease}
+.card:hover .donut circle{stroke-width:13}
+.card h3{margin:0 0 12px;font-size:12px;color:var(--muted);font-weight:600}
+.run{display:flex;align-items:center;gap:18px}
+.donut{flex:none}
+.legend{display:grid;gap:6px;font-size:13px}
+.legend div{display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:3px;flex:none}
+.legend b{font-variant-numeric:tabular-nums;min-width:22px}
+.areas{display:grid;gap:8px}
+.area{display:grid;grid-template-columns:minmax(0,1fr) 26px;gap:3px 10px;font-size:12px;align-items:center}
+.area span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.area b{text-align:right;font-variant-numeric:tabular-nums}
+.track{grid-column:1 / -1;height:6px;border-radius:3px;background:var(--chip);overflow:hidden;display:flex}
+.track i{display:block;height:100%}
+.big{font-size:26px;font-weight:700;line-height:1;margin:0 0 4px;font-variant-numeric:tabular-nums}
+.big small{font-size:13px;font-weight:500;color:var(--muted)}
+.card p{margin:10px 0 0;font-size:12px;color:var(--muted)}
+
+/* Panel de contenido */
+.panel-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.panel-h h2{margin:0;font-size:18px}
+.panel-h p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{position:relative}
+.search input{width:240px;max-width:100%;padding:7px 10px 7px 30px;border:1px solid var(--line-2);border-radius:var(--r);font:inherit;background:var(--card)}
+.search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:6px 11px;cursor:pointer;font-size:13px;color:var(--muted);border-right:1px solid var(--line-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+
+.grid{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.grid th{background:var(--head);font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.grid td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.grid tr:last-child td{border-bottom:0}
+.grid tbody tr{cursor:pointer}
+.grid tbody tr:hover td{background:var(--hover)}
+.grid tbody tr.sel td{background:var(--sel)}
+.grid .gid{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;width:1%}
+.open{background:none;border:0;padding:0;text-align:left;cursor:pointer;font-weight:600;color:var(--ink)}
+.open:hover{color:var(--blue)}
+.grid .muted{color:var(--muted);font-size:13px;white-space:nowrap}
+.grid .w1{width:1%}
+.empty td{text-align:center;color:var(--muted);cursor:default;padding:24px}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px 2px 7px;border-radius:12px;white-space:nowrap}
+.badge.pass{background:var(--green-bg);color:var(--green)}
+.badge.fail{background:var(--red-bg);color:var(--red)}
+.imp{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.imp.alto{background:var(--red);color:var(--on-c)}
+.imp.medio{background:var(--orange-bg);color:var(--orange)}
+.tp{font-size:12px;color:var(--muted);white-space:nowrap}
+.tp i{font-style:normal;display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:12px;margin-right:4px;font-size:12px;font-weight:600;border:1px solid transparent}
+.tp i::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.tp i.ta{background:var(--tag-a-bg);color:var(--tag-a);border-color:var(--tag-a-line)}
+.tp i.tm{background:var(--tag-m-bg);color:var(--tag-m);border-color:var(--tag-m-line)}
+
+.improve-sec{margin-top:28px}
+.imp-list{display:grid;gap:8px}
+.mi{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber-line);border-radius:var(--r)}
+.mi-h{display:grid;grid-template-columns:40px minmax(0,1fr) 14px;gap:10px;align-items:center;width:100%;padding:11px 14px;border:0;background:none;text-align:left;cursor:pointer}
+.mi-h:hover{background:var(--hover)}
+.mi-h .id{font-family:var(--mono);font-size:12px;color:var(--amber);font-weight:600}
+.mi-h .title{font-weight:600}
+.mi-h .chev{width:8px;height:8px;justify-self:center;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
+.mi-h[aria-expanded="true"] .chev{transform:rotate(-135deg)}
+.mi-b{padding:2px 14px 14px 64px}
+.mi-b dl{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px 14px;margin:0}
+.mi-b dt{font-size:12px;font-weight:600;color:var(--muted);padding-top:1px}
+.mi-b dd{margin:0}
+.mi-b ul{margin:0;padding-left:1.1em}
+.mi-b .ex{display:block;margin-top:4px;padding:6px 10px;background:var(--amber-bg);border-radius:4px;font-style:italic}
+.legend-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;margin-bottom:16px}
+.legend-card{padding:0!important;background:var(--lg-bg)!important;border:1px solid var(--lg-line)!important;border-left:4px solid var(--blue)!important;overflow:hidden}
+.lg-t{margin:0;font-size:13px}
+.lg-h{display:flex;align-items:center;gap:10px;width:100%;padding:12px 18px;border:0;background:none;cursor:pointer;text-align:left;font-weight:600;color:var(--blue);font-size:14px;transition:background-color .15s}
+.lg-h:hover{background:var(--lg-hover)}
+.lg-h[aria-expanded="true"]{border-bottom:1px solid var(--lg-line)}
+.lg-h .lg-i{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--blue);color:var(--on-c)}
+.lg-h small{font-weight:400;color:var(--muted);font-size:12px}
+.lg-h .lg-cta{margin-left:auto;font-size:12px;font-weight:600;color:var(--blue)}
+.lg-h .chev{width:8px;height:8px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(45deg);transition:transform .15s}
+.lg-h[aria-expanded="true"] .chev{transform:rotate(-135deg)}
+.lg{padding:14px 18px 16px;background:var(--card)}
+.lg[hidden]{display:none}
+.lg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px 22px;margin:0}
+.lg div{display:flex;gap:10px;align-items:baseline;min-width:0}
+.lg dt{flex:none;min-width:64px}
+.lg dd{margin:0;font-size:13px;color:var(--muted)}
+.lg dd b{color:var(--ink);font-weight:600}
+.k{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:600;padding:1px 7px;border-radius:4px;background:var(--chip);color:var(--ink)}
+.improve{margin-top:16px;background:var(--amber-bg);border:1px dashed var(--amber-line);border-radius:var(--r);padding:14px 18px}
+.improve h3{margin:0 0 4px;font-size:14px}
+.improve p{margin:0 0 6px;color:var(--ink)}
+.improve ul{margin:0;padding-left:1.2em}
+
+/* Cobertura */
+.plan{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px}
+.plan div{padding:12px 16px;border-right:1px solid var(--line);min-width:0}
+.plan div:last-child{border-right:0}
+.plan h4{margin:0 0 4px;font-size:12px;color:var(--muted);font-weight:600}
+.plan p,.plan ul{margin:0;font-size:13px}
+.plan ul{padding-left:1.1em}
+.ctabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-bottom:0;border-radius:var(--r) var(--r) 0 0;padding:6px 6px 0;overflow-x:auto}
+.ctab{display:inline-flex;align-items:center;gap:8px;padding:10px 14px 11px;border:0;border-bottom:3px solid transparent;background:none;cursor:pointer;font-weight:600;font-size:13px;color:var(--muted);white-space:nowrap;border-radius:6px 6px 0 0;transition:background-color .15s,color .15s,border-color .15s}
+.ctab:hover{background:var(--hover);color:var(--ink)}
+.ctab[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue);background:var(--lg-bg)}
+.ctab .n{font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px;background:var(--chip);color:var(--muted);font-variant-numeric:tabular-nums}
+.ctab[aria-selected="true"] .n{background:var(--blue);color:var(--on-c)}
+.cpanel .grid{border-top-left-radius:0;border-top-right-radius:0}
+.cpanel{margin-bottom:14px}
+.cp-print{display:none}
+.cov-group{margin-bottom:14px}
+.cov-group h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:14px}
+.cov-group h3 .n{font-size:12px;font-weight:600;color:var(--muted);background:var(--chip);border-radius:10px;padding:0 8px}
+.grid.cov tbody tr{cursor:default}
+.grid.cov tbody tr:hover td{background:transparent}
+
+/* Panel lateral de detalle */
+.backdrop{position:fixed;inset:0;background:var(--scrim);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(860px,94vw);background:var(--card);z-index:21;display:flex;flex-direction:column;box-shadow:-12px 0 32px var(--shadow);transform:translateX(0);transition:transform .18s ease-out}
+.drawer[hidden]{display:none}
+.dr-top{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--head)}
+.crumb{font-size:12px;color:var(--muted);margin-right:auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb b{color:var(--ink);font-family:var(--mono);font-weight:500}
+.icon-btn{display:inline-grid;place-items:center;width:32px;height:32px;border:1px solid var(--line-2);background:var(--card);border-radius:var(--r);cursor:pointer;color:var(--muted)}
+.icon-btn:hover{color:var(--ink);background:var(--hover)}
+.icon-btn:disabled{opacity:.4;cursor:default}
+.dr-body{overflow-y:auto;padding:20px 22px 40px;flex:1}
+.dr-title{display:flex;gap:10px;align-items:flex-start;margin:0 0 12px}
+.dr-title h2{margin:0;font-size:19px;line-height:1.3}
+.dr-meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin:0 0 18px;padding:0 0 16px;border-bottom:1px solid var(--line);font-size:13px}
+.dr-meta div{display:flex;flex-direction:column;gap:2px}
+.dr-meta dt{font-size:11px;color:var(--faint);font-weight:600}
+.dr-meta dd{margin:0}
+
+.tct{width:100%;border-collapse:collapse;table-layout:fixed}
+.tct th,.tct td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tct th{background:var(--head);font-size:12px;font-weight:600;color:var(--muted)}
+.tct .req td{background:var(--req)}
+.tct .req p{margin:0 0 5px}
+.tct .req p:last-child{margin:0}
+.tct .req b{font-weight:600}
+.tct col.c1{width:50%}
+.tct td.exp{background:var(--ok-bg)}
+.tct td.act{background:var(--ok-bg)}
+.tct td.act.fail{background:var(--red-bg)}
+.res{display:flex;gap:7px;align-items:flex-start}
+.res svg{flex:none;margin-top:3px}
+.vlabel{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-weight:600}
+.vlabel small{font-weight:500;color:var(--muted);font-size:12px}
+.vlabel .ctl{font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--line-2);border-radius:4px;padding:0 6px}
+
+.term{background:var(--term);color:var(--term-ink);border-radius:var(--r);margin:0 0 10px;overflow:hidden}
+.term-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 6px 5px 10px;background:var(--term-h);font-size:11px;color:#9FB0C3}
+.term pre{margin:0;padding:9px 12px;font-family:var(--mono);font-size:12.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.copy{border:1px solid #3A4859;background:#2C3A4C;color:#DCE4EC;border-radius:4px;font-size:11px;padding:2px 9px;cursor:pointer}
+.copy:hover{background:#364659}
+.copy.ok{background:var(--green);border-color:var(--green);color:var(--on-c)}
+
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{position:relative;padding:0 0 10px 30px;counter-increment:s}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--sel);color:var(--blue);font-size:11px;font-weight:700;display:grid;place-items:center}
+.steps li::after{content:"";position:absolute;left:9.5px;top:22px;bottom:2px;width:1px;background:var(--line-2)}
+.steps li:last-child::after{display:none}
+
+.note{display:flex;gap:8px;margin:14px 0 0;padding:10px 12px;background:var(--amber-bg);border:1px solid var(--note-line);border-radius:var(--r);font-size:13px}
+.note svg{flex:none;margin-top:2px;color:var(--amber)}
+
+@media (max-width:1100px){ .summary{grid-template-columns:1fr 1fr} .summary .card:first-child{grid-column:1 / -1} .plan{grid-template-columns:1fr 1fr} .plan div:nth-child(2){border-right:0} .plan div:nth-child(-n+2){border-bottom:1px solid var(--line)} }
+@media (max-width:820px){
+  .mi-b{padding-left:14px}
+  .mi-b dl{grid-template-columns:minmax(0,1fr)}
+  .mi-b dt{padding-top:6px}
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{border-right:0;border-bottom:1px solid var(--line);padding:10px}
+  .side-h,.side-box{display:none}
+  .nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+  .nav button{min-width:0}
+  .nav button{flex:1;justify-content:center;padding:8px 6px;font-size:13px}
+  .nav button svg{display:none}
+  .nav .n{margin-left:4px}
+  .main{padding:16px 14px 48px}
+  .top-meta{display:none}
+  #theme-l{display:none}
+  .theme{padding:0 9px}
+  .summary{grid-template-columns:minmax(0,1fr)}
+  .plan{grid-template-columns:minmax(0,1fr)}
+  .plan div{border-right:0;border-bottom:1px solid var(--line)}
+  .plan div:last-child{border-bottom:0}
+  .grid .hide-m{display:none}
+  .search input{width:100%}
+  .search{flex:1}
+  .drawer{width:100vw}
+  .dr-body{padding:16px 14px 40px}
+  .tct,.tct tbody,.tct tr,.tct th,.tct td{display:block;width:100%}
+  .tct colgroup,.tct tr.hdr{display:none}
+  .tct td[data-h]::before{content:attr(data-h);display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+  .tct td{border-top:0}
+}
+@media (max-width:480px){ .nav{grid-template-columns:repeat(2,minmax(0,1fr))} .nav button{font-size:12px} .nav button .lbl-l{display:none} }
+@media (min-width:481px){ .nav button .lbl-s{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .ctabs{display:none!important}
+  .cpanel{display:block!important;margin-bottom:16px}
+  .cp-print{display:block;font-size:14px;margin:0 0 6px}
+  .lg,.mi-b{display:grid!important}
+  :root{--bg:#fff}
+  .topbar,.side,.tools,.backdrop,.drawer{display:none!important}
+  .shell{display:block} [role="tabpanel"]{display:block!important;margin-bottom:24px}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo" aria-hidden="true">QA</div>
+  <div class="proj"><b>wordcounter.net</b><span>Failure Report. Prueba técnica SDET (Lumu), Parte 2</span></div>
+  <div class="top-right"><div class="top-meta"><span>Autor <b>Renato Mattos</b></span><span>Entorno <b>Chrome | Firefox | Edge</b></span></div><button type="button" class="theme" id="theme" aria-pressed="false"><svg class="i-moon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M13.5 9.6A5.6 5.6 0 0 1 6.4 2.5a5.6 5.6 0 1 0 7.1 7.1z"/></svg><svg class="i-sun" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg><span id="theme-l">Modo oscuro</span></button></div>
+</header>
+
+<div class="shell">
+  <nav class="side" aria-label="Secciones">
+    <p class="side-h">Test run</p>
+    <div class="nav" role="tablist" aria-label="Secciones del reporte">
+      <button role="tab" id="tab-coverage" aria-controls="coverage" aria-selected="true" class="n-cov">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M5 5.5h6M5 8h6M5 10.5h4"/></svg>
+        <span class="lbl-l">TCs Coverage</span><span class="lbl-s">Coverage</span><span class="n" data-n="coverage"></span></button>
+      <button role="tab" id="tab-passed" aria-controls="passed" aria-selected="false" tabindex="-1" class="n-pass">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M5.3 8.2l1.8 1.8 3.6-3.8"/></svg>
+        <span class="lbl-l">TCs Passed</span><span class="lbl-s">Passed</span><span class="n" data-n="passed"></span></button>
+      <button role="tab" id="tab-failed" aria-controls="failed" aria-selected="false" tabindex="-1" class="n-fail">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M5.8 5.8l4.4 4.4M10.2 5.8l-4.4 4.4"/></svg>
+        <span class="lbl-l">TCs Failed</span><span class="lbl-s">Failed</span><span class="n" data-n="failed"></span></button>
+      <button role="tab" id="tab-improve" aria-controls="improve" aria-selected="false" tabindex="-1" class="n-imp">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 1.8a4.4 4.4 0 0 0-2.6 8v1.7h5.2V9.8A4.4 4.4 0 0 0 8 1.8z"/><path d="M6.2 13.8h3.6"/></svg>
+        <span class="lbl-l">Mejoras</span><span class="lbl-s">Mejoras</span><span class="n" data-n="improve"></span></button>
+    </div>
+    <div class="side-box">
+      <p><b>Sitio:</b> <a href="https://wordcounter.net/" target="_blank" rel="noopener">wordcounter.net</a></p>
+      <p><b>Configuración:</b> por defecto (Keyword Density x1)</p>
+      <p><b>Repositorio:</b> <code>part1-automated-suite</code>, <code>TECHNICAL_NOTES.md</code></p>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+    <section class="summary" aria-label="Resumen del test run" id="summary"></section>
+
+    <div class="legend-card" aria-labelledby="lg-h">
+      <h3 class="lg-t"><button type="button" class="lg-h" id="lg-h" aria-expanded="false" aria-controls="lg-b"><span class="lg-i" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3.6" r="1.5"/><rect x="6.7" y="6.3" width="2.6" height="7.2" rx="1.1"/></svg></span>Leyenda <small>Qué significa cada código y etiqueta</small><span class="lg-cta" id="lg-cta">Ver leyenda</span><span class="chev" aria-hidden="true"></span></button></h3>
+      <dl class="lg" id="lg-b" hidden>
+        <div><dt><span class="k">TC01</span></dt><dd><b>Test Case.</b> Punto del Test Plan en Coverage.</dd></div>
+        <div><dt><span class="k">P01</span></dt><dd><b>Passed 01.</b> Test case aprobado.</dd></div>
+        <div><dt><span class="k">F1</span></dt><dd><b>Failed 1.</b> Test case fallido (issue).</dd></div>
+        <div><dt><span class="k">F1a</span></dt><dd><b>Variante.</b> Otra forma de reproducir el mismo issue.</dd></div>
+        <div><dt><span class="k">Control</span></dt><dd><b>Variante de control.</b> Muestra el caso donde el issue no ocurre, para aislar la causa.</dd></div>
+        <div><dt><span class="k">M1</span></dt><dd><b>Mejora 1.</b> Oportunidad de mejora, no cuenta como issue.</dd></div>
+        <div><dt><span class="tp"><i class="ta">Automatizado</i></span></dt><dd>Cubierto por la suite Cypress + Cucumber.</dd></div>
+        <div><dt><span class="tp"><i class="tm">Manual</i></span></dt><dd>Verificado en exploración manual.</dd></div>
+        <div><dt><span class="imp alto">Alto</span></dt><dd><b>Impacto alto.</b> Se pierde parte del análisis o el conteo se altera mucho.</dd></div>
+        <div><dt><span class="imp medio">Medio</span></dt><dd><b>Impacto medio.</b> Conteo incorrecto en casos puntuales.</dd></div>
+        <div><dt><span class="k">@knownIssue</span></dt><dd>Tag de los escenarios automatizados que reproducen un issue.</dd></div>
+      </dl>
+    </div>
+    <section id="coverage" role="tabpanel" aria-labelledby="tab-coverage">
+      <div class="panel-h"><div><h2>Test Cases Coverage</h2><p id="cov-sub"></p></div></div>
+      <div class="plan">
+        <div><h4>Objetivo</h4><p>Validar Word Count, Character Count y Keyword Density.</p></div>
+        <div><h4>Entorno</h4><p>Chrome | Firefox | Edge, configuración por defecto del sitio (Keyword Density en x1).</p></div>
+        <div><h4>Enfoque</h4><p>Exploración manual y suite Cypress + Cucumber (23 escenarios). La suite es estable ante actualizaciones del DOM, independiente del idioma del navegador, reproducible entre ejecuciones, se ejecuta por tags y genera un reporte HTML (detalles en <code>TECHNICAL_NOTES.md</code>).</p></div>
+        <div><h4>Fuera de alcance</h4><ul id="scope"></ul></div>
+      </div>
+      <div id="cov-groups"></div>
+    </section>
+
+    <section id="passed" role="tabpanel" aria-labelledby="tab-passed" hidden>
+      <div class="panel-h">
+        <div><h2>Test Cases Passed</h2><p>Haz clic en un test case para ver cómo reproducirlo.</p></div>
+        <div class="tools" data-tools="passed">
+          <label class="search"><span class="sr">Buscar test case</span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><input type="search" placeholder="Buscar por ID o título"></label>
+          <div class="seg" role="group" aria-label="Filtrar por tipo"><button type="button" data-t="all" aria-pressed="true">Todos</button><button type="button" data-t="A" aria-pressed="false">Automatizado</button><button type="button" data-t="M" aria-pressed="false">Manual</button></div>
+        </div>
+      </div>
+      <table class="grid"><thead><tr><th>ID</th><th>Título</th><th class="hide-m">Área</th><th class="hide-m">Tipo</th><th>Estado</th></tr></thead><tbody id="passed-rows"></tbody></table>
+    </section>
+
+    <section id="failed" role="tabpanel" aria-labelledby="tab-failed" hidden>
+      <div class="panel-h">
+        <div><h2>Test Cases Failed</h2><p>Haz clic en un test case para ver cómo reproducirlo.</p></div>
+        <div class="tools" data-tools="failed">
+          <label class="search"><span class="sr">Buscar test case</span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><input type="search" placeholder="Buscar por ID o título"></label>
+        </div>
+      </div>
+      <table class="grid"><thead><tr><th>ID</th><th>Título</th><th class="hide-m">Área</th><th>Impacto</th><th>Estado</th></tr></thead><tbody id="failed-rows"></tbody></table>
+    </section>
+
+    <section id="improve" role="tabpanel" aria-labelledby="tab-improve" hidden>
+      <div class="panel-h"><div><h2>Oportunidades de mejora</h2><p>No cuentan como issues. Haz clic en cada una para ver el detalle.</p></div></div>
+      <div class="imp-list" id="improve-list"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-h" hidden>
+  <div class="dr-top">
+    <span class="crumb" id="dr-crumb"></span>
+    <button type="button" class="icon-btn" id="dr-prev" aria-label="Test case anterior"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg></button>
+    <button type="button" class="icon-btn" id="dr-next" aria-label="Test case siguiente"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
+    <button type="button" class="icon-btn" id="dr-close" aria-label="Cerrar detalle"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+  </div>
+  <div class="dr-body" id="dr-body"></div>
+</aside>
+
+<script>
+/* ---------- Datos ---------- */
+var PRE = "Chrome | Firefox | Edge, configuración por defecto, página sin traducir y cuadro de texto vacío (Ctrl+A y Supr, o recargar).";
+var OPEN = "Abrir https://wordcounter.net/.";
+var PASTE = "Pegar la entrada en el cuadro de texto (botón Copiar y Ctrl+V).";
+var READ_C = "Leer el contador debajo del cuadro (N words N characters).";
+var READ_KD = "Leer el panel Keyword Density de la derecha.";
+function wc(action){ return [OPEN, action || PASTE, READ_C]; }
+function kd(action){ return [OPEN, action || PASTE, READ_KD]; }
+
+var T13 = "lumu lumu lumu lumu lumu illuminates illuminates attacks and adversaries lumu illuminates all attacks and adversaries";
+var T29 = "Lumu, lumu. LUMU! illuminates... illuminates? attacks & attacks @2024 adversaries-adversaries \"test\" 'test' well-known well-known don't don't café café niño niño 😀😀 123 123    lumu";
+
+var PASSED = [
+ {id:"P01",t:"Estado inicial de la página",ty:"A+M",req:"Los contadores empiezan en cero.",steps:[OPEN,"Sin escribir nada, leer el contador debajo del cuadro."],exp:"0 words, 0 characters"},
+ {id:"P02",t:"Campo vacío",ty:"M",req:"Con el cuadro vacío, los contadores quedan en cero.",steps:wc("Dejar el cuadro vacío."),exp:"0 words, 0 characters"},
+ {id:"P03",t:"Oración simple",ty:"A+M",req:"Palabras y caracteres coinciden con el conteo manual. Los espacios cuentan como caracteres.",in:["lumu illuminates attacks and adversaries"],steps:wc(),exp:"5 words, 40 characters"},
+ {id:"P04",t:"Solo espacios (5)",ty:"A",req:"Los espacios suman caracteres, no palabras.",steps:wc("Presionar la barra espaciadora 5 veces."),exp:"0 words, 5 characters"},
+ {id:"P05",t:"Solo espacios (29)",ty:"M",req:"Los espacios suman caracteres, no palabras.",steps:wc("Presionar la barra espaciadora 29 veces."),exp:"0 words, 29 characters"},
+ {id:"P06",t:"Espacios múltiples entre palabras",ty:"A",req:"Varios espacios seguidos no crean palabras. Todos suman como caracteres.",steps:wc("Escribir `lumu`, presionar la barra espaciadora 11 veces y escribir `lumu`."),exp:"2 words, 19 characters"},
+ {id:"P07",t:"Saltos de línea sin texto",ty:"M",req:"Los saltos de línea no cuentan como palabra ni como carácter.",steps:wc("Presionar Enter 5 veces, sin escribir texto."),exp:"0 words, 0 characters",note:"El escenario automatizado equivalente pasa sin validar este comportamiento (espera el mismo valor del estado inicial). Por eso el caso queda como Manual hasta corregirlo."},
+ {id:"P08",t:"Puntuación pegada a la palabra",ty:"A+M",req:"La puntuación pegada suma caracteres, no palabras.",in:["lumu, lumu."],steps:wc(),exp:"2 words, 11 characters"},
+ {id:"P09",t:"Palabra con apóstrofe",ty:"A+M",req:"Una palabra con apóstrofe cuenta como una sola.",in:["don't stop"],steps:wc(),exp:"2 words, 10 characters"},
+ {id:"P10",t:"Palabra con guion",ty:"A+M",req:"Una palabra con guion cuenta como una sola.",in:["well-known test"],steps:wc(),exp:"2 words, 15 characters"},
+ {id:"P11",t:"Reemplazo del texto en la misma sesión",ty:"A+M",req:"El contador se recalcula al cambiar el texto, sin recargar.",in:[["Entrada A","Lorem ipsum dolor sit amet"],["Entrada B (termina con un espacio)","Lorem ipsum dolor "]],steps:[OPEN,"Pegar la entrada A y leer el contador.","Sin recargar, seleccionar todo (Ctrl+A) y pegar la entrada B.","Leer el contador de nuevo."],exp:"A: 5 words, 26 characters. B: 3 words, 18 characters."},
+ {id:"P12",t:"Mayúsculas y minúsculas",ty:"M",req:"Mayúsculas y minúsculas no cambian el conteo.",in:["Lumu lumu LUMU illuminates"],steps:wc(),exp:"4 words, 26 characters"},
+ {id:"P13",t:"Texto largo del enunciado",ty:"M",req:"Conteo correcto con el texto de ejemplo del enunciado.",in:[T13],steps:wc(),exp:"16 words, 117 characters"},
+ {id:"P14",t:"Palabra con guion y palabra acentuada",ty:"M",req:"Una palabra acentuada cuenta como una sola.",in:["well-known well-known café"],steps:wc(),exp:"3 words",note:"Los caracteres pueden dar 26 o 27 según cómo se ingrese la tilde (posible causa: carácter único o letra más tilde combinable). Por eso se valida solo 3 words."},
+ {id:"P15",t:"Palabra con guion y letra ñ",ty:"M",req:"La letra ñ no altera el conteo.",in:["well-known well-known niño"],steps:wc(),exp:"3 words, 26 characters"},
+ {id:"P16",t:"Símbolo < pegado (Word Count)",ty:"M",req:"El símbolo < pegado no altera el Word Count.",in:["<lorem ipsum dolor"],steps:wc(),exp:"3 words, 18 characters",note:"El efecto en Keyword Density está reportado en F2."},
+ {id:"P17",t:"Símbolo < con cierre > (Word Count)",ty:"M",req:"El símbolo < con cierre > no altera el Word Count.",in:["<lorem> ipsum dolor"],steps:wc(),exp:"3 words, 19 characters",note:"El efecto en Keyword Density está reportado en F2."},
+ {id:"P18",t:"Ranking con el texto del enunciado",ty:"A+M",req:"Keyword Density lista las palabras más repetidas con conteo y porcentaje.",in:[T13],steps:kd(),exp:"lumu 6 (43%), illuminates 3 (21%), attacks 2 (14%), adversaries 2 (14%), all 1 (7%)"},
+ {id:"P19",t:"Una sola palabra repetida",ty:"A+M",req:"Una palabra única muestra 100%.",in:["lumu lumu lumu lumu"],steps:kd(),exp:"lumu 4 (100%)"},
+ {id:"P20",t:"Orden en caso de empate",ty:"A+M",req:"Con la misma frecuencia se respeta el orden de ingreso.",in:["zebra apple zebra apple"],steps:kd(),exp:"zebra 2 y apple 2, zebra primero"},
+ {id:"P21",t:"Agrupación sin distinguir mayúsculas",ty:"A+M",req:"Keyword Density agrupa sin distinguir mayúsculas.",in:["Lumu lumu LUMU illuminates"],steps:kd(),exp:"lumu 3 (75%), illuminates 1 (25%)"},
+ {id:"P22",t:"Agrupación con puntuación pegada",ty:"A+M",req:"La puntuación pegada no separa la palabra en el ranking.",in:["lumu, lumu."],steps:kd(),exp:"lumu 2 (100%)"},
+ {id:"P23",t:"Números fuera del ranking",ty:"M",req:"Los números no aparecen en Keyword Density.",in:["123 123 123 lumu"],steps:kd(),exp:"Solo lumu 1 (100%). El 123 no aparece.",note:"El escenario automatizado equivalente no falla si el 123 aparece. Por eso el caso queda como Manual hasta reforzar la aserción. Que Word Count sí cuente el 123 está reportado en F5."},
+ {id:"P24",t:"Guion con texto sin acentos",ty:"M",req:"Una palabra con guion se lista completa.",in:["well-known well-known cafe"],steps:kd(),exp:"well-known 2 (67%), cafe 1 (33%)"},
+ {id:"P25",t:"Guion junto a otra palabra repetida",ty:"M",req:"Una palabra con guion se lista completa.",in:["well-known well-known test test"],steps:kd(),exp:"well-known 2 (50%), test 2 (50%)"},
+ {id:"P26",t:"Guion junto a dos palabras más",ty:"M",req:"Una palabra con guion se lista completa.",in:["well-known well-known apple apple banana banana"],steps:kd(),exp:"well-known 2, apple 2, banana 2 (33% cada una)"},
+ {id:"P27",t:"Palabra de dos letras",ty:"M",req:"Una palabra de 2 letras aparece en el ranking.",in:["ee"],steps:kd(),exp:"ee 1 (100%)"},
+ {id:"P28",t:"Guion entre palabras comunes",ty:"M",req:"Palabras comunes unidas por guion se listan completas.",in:["it-done well-do"],steps:kd(),exp:"it-done 1 (50%), well-do 1 (50%)"},
+ {id:"P29",t:"Tildes y ñ se agrupan",ty:"M",req:"Palabras con tilde o ñ se agrupan correctamente.",in:[["Incluye 4 espacios antes del último lumu",T29]],steps:kd(),exp:"café 2 y niño 2, agrupados"},
+ {id:"P30",t:"Comillas alrededor de la palabra",ty:"M",req:"Las comillas no separan la palabra en el ranking.",in:[["Misma entrada de P29",T29]],steps:kd(),exp:"test 2 (agrupa \"test\" y 'test') y lumu 4"},
+ {id:"P31",t:"Delimitadores { } [ ] ' ' | |",ty:"M",req:"Llaves, corchetes, comillas simples y barras no afectan el ranking.",in:[["6 líneas","<bold>\n<test>\n{oi}\n[hola]\n'hello'\n|hihi|"]],steps:kd(),exp:"oi, hola, hello y hihi (25% cada uno)",note:"Las líneas con < > no aparecen: está reportado en F2."},
+ {id:"P32",t:"Símbolo < separado por un espacio",ty:"M",req:"Con un espacio entre < y la palabra, la palabra aparece en el ranking.",in:[["Entrada A","< test"],["Entrada B","< agua"]],steps:[OPEN,"Pegar la entrada A y leer Keyword Density.","Seleccionar todo (Ctrl+A), pegar la entrada B y leer de nuevo."],exp:"A: test aparece. B: agua aparece."},
+ {id:"P33",t:"Panel Keyword Density abierto por defecto",ty:"A+M",req:"El panel Keyword Density aparece expandido al cargar.",in:["lumu lumu lumu lumu"],steps:kd(),exp:"Panel expandido con la lista visible, sin hacer clic"}
+];
+
+var FAILED = [
+ {id:"F1",t:"Símbolos especiales inflan el conteo de palabras",imp:"Alto",
+  req:"La puntuación suelta y los símbolos no cuentan como palabras. Un correo se separa en sus partes en Keyword Density.",
+  extra:"Símbolos afectados: ¡ ¿ º ª « » ° § € £ ¥ ¢ ± × ≈ ™ ® © „",
+  auto:"Validate special characters do not break word tokenization",
+  v:[
+   {l:"F1a",in:[["Control, sin símbolo","Artigo 1: renato_email@gmail.com . , @ # $ % !"],["Con símbolo","¡ Artigo 1: renato_email@gmail.com . , @ # $ % !"]],steps:[OPEN,"Pegar el control. Resultado: 4 words.","Seleccionar todo y pegar la entrada con símbolo.",READ_C+" Leer también Keyword Density."],exp:"4 words, igual que el control",act:"11 words. Keyword Density: artigo, renato_email@gmail, com"},
+   {l:"F1b",in:["¿Hola? ¡Test! 90° . , ! @ # $ *"],steps:[OPEN,PASTE,READ_C],exp:"3 words",act:"10 words, 31 characters"},
+   {l:"F1c",in:[["Control",". renato_email@gmail.com . ."],["Con símbolo","¿ renato_email@gmail.com . ."]],steps:[OPEN,"Pegar el control. Resultado: 2 words, correo separado en renato, email, gmail, com.","Seleccionar todo y pegar la entrada con símbolo.",READ_C+" Leer también Keyword Density."],exp:"2 words, correo separado en renato, email, gmail, com",act:"4 words. Keyword Density: renato_email@gmail, com"}
+  ]},
+ {id:"F2",t:"Palabra pegada al símbolo < se descarta del Keyword Density",imp:"Alto",
+  req:"Todas las palabras del texto aparecen en Keyword Density.",
+  auto:"Validate word attached to less-than symbol breaks keyword density completely (cubre F2a)",
+  note:"Posible causa: el sitio interpreta <palabra como una etiqueta HTML. Se pierde parte del análisis sin aviso.",
+  v:[
+   {l:"F2a",s:"sin cierre",in:["<lorem ipsum dolor"],steps:kd(),exp:"lorem 1, ipsum 1, dolor 1",act:"Panel vacío (Start typing your document...)"},
+   {l:"F2b",s:"con cierre",in:["<lorem> ipsum dolor"],steps:kd(),exp:"lorem 1, ipsum 1, dolor 1",act:"Solo ipsum 1 y dolor 1. Se pierde lorem."},
+   {l:"F2c",s:"control, con espacio",ok:true,in:["< agua"],steps:kd(),exp:"agua aparece",act:"agua aparece"}
+  ]},
+ {id:"F3",t:"Una sola letra cuenta como palabra",imp:"Medio",
+  req:"Una palabra necesita al menos 2 letras. El propio Keyword Density lista ee, pero no e.",
+  auto:"Validate single letter should NOT count as a word. Validate single letter with punctuation should NOT count as a word",
+  v:[
+   {l:"F3a",in:["e"],steps:wc(),exp:"0 words, 1 character",act:"1 word, 1 character"},
+   {l:"F3b",in:["e,"],steps:wc(),exp:"0 words, 2 characters",act:"1 word, 2 characters"},
+   {l:"F3c",s:"control",ok:true,in:["ee"],steps:wc(),exp:"1 word, 2 characters",act:"1 word, 2 characters"}
+  ]},
+ {id:"F4",t:"Los emojis cuentan como palabra",imp:"Medio",
+  req:"Los emojis suman caracteres, no palabras.",
+  auto:"Validate emoji should NOT count as a word",
+  v:[{l:"F4a",in:["lumu 😀 illuminates"],steps:wc(),exp:"2 words, 19 characters",act:"3 words, 19 characters"}]},
+ {id:"F5",t:"Los números cuentan como palabra",imp:"Medio",
+  req:"Los números suman caracteres, no palabras. Keyword Density ya los excluye (P23).",
+  auto:"Validate numbers should NOT count as a word",
+  v:[
+   {l:"F5a",in:["lumu 123 illuminates"],steps:wc(),exp:"2 words, 20 characters",act:"3 words, 20 characters"},
+   {l:"F5b",in:["123 123 123 lumu"],steps:wc(),exp:"1 word",act:"4 words, 16 characters"}
+  ]},
+ {id:"F6",t:"Palabras con apóstrofe no aparecen en Keyword Density",imp:"Medio",
+  req:"Las palabras con apóstrofe aparecen en Keyword Density.",
+  auto:"Validate words with apostrophes should appear in keyword density",
+  note:"El comportamiento no es uniforme: Couldn't aparece, las demás contracciones no.",
+  v:[
+   {l:"F6a",in:["don't don't stop"],steps:kd(),exp:"don't 2, stop 1",act:"Solo stop 1 (100%)"},
+   {l:"F6b",s:"contracciones",in:[["9 líneas","it's\nDon't\nHaven't\nI'm\nYou\nare\nok\nWe're\nCan't I'll He'll We'll"]],steps:[OPEN,"Pegar las 9 líneas. Resultado: 12 words, Keyword Density vacío.","Agregar ` Couldn't` al final de la línea 8 (después de We're).",READ_KD],exp:"Todas las contracciones aparecen",act:"Solo aparece couldn't 1 (100%)"}
+  ]},
+ {id:"F7",t:"Palabra con guion pierde su primera parte en Keyword Density",imp:"Medio",
+  req:"Una palabra con guion aparece completa en Keyword Density.",
+  auto:"Validate hyphenated word does not lose its first part in keyword density",
+  note:"Ocurre cuando el texto tiene tildes, ñ o emojis. Posible causa: el guion separa la palabra y el filtro de palabras comunes elimina well (escrita sola, well tampoco aparece: entrada `well test`).",
+  v:[
+   {l:"F7a",in:["well-known well-known niño"],steps:kd(),exp:"well-known 2, niño 1",act:"known 2, niño 1"},
+   {l:"F7b",s:"control, sin acentos",ok:true,in:["well-known well-known cafe"],steps:kd(),exp:"well-known 2, cafe 1",act:"well-known 2, cafe 1"},
+   {l:"F7c",s:"con emoji",in:["well-known well-known 😀😀"],steps:kd(),exp:"well-known 2, 😀😀 1",act:"known 2, 😀😀 1"}
+  ]}
+];
+
+var WC="Word Count y Character Count", SC="Caracteres especiales y símbolos", KD="Keyword Density";
+var COVERAGE = [
+ [WC,"TC01","Estado inicial: los contadores arrancan en 0 words y 0 characters.","A+M"],
+ [WC,"TC02","Conteo base con una oración simple. Los espacios cuentan como caracteres.","A+M"],
+ [WC,"TC03","Campo vacío y solo espacios: suman caracteres, no palabras.","A+M"],
+ [WC,"TC04","Espacios múltiples entre palabras.","A+M"],
+ [WC,"TC05","Saltos de línea (Enter): no cuentan como palabra ni carácter.","M"],
+ [WC,"TC06","Puntuación pegada a la palabra.","A+M"],
+ [WC,"TC07","Apóstrofes y guiones: don't y well-known cuentan como una palabra.","A+M"],
+ [WC,"TC08","Reemplazo del texto en la misma sesión, sin recargar.","A+M"],
+ [WC,"TC09","Mayúsculas y minúsculas.","A+M"],
+ [WC,"TC10","Una sola letra y letra con puntuación (regla de mínimo 2 letras).","A+M"],
+ [WC,"TC11","Emojis y números: suman caracteres, no palabras.","A+M"],
+ [WC,"TC12","Texto largo del enunciado (16 palabras).","M"],
+ [WC,"TC13","Texto complejo: símbolos, comillas, acentos, emojis, números y espacios múltiples.","M"],
+ [WC,"TC14","Correo electrónico dentro del texto.","M"],
+ [WC,"TC15","Texto de gran volumen: el cuadro de texto se congela con más de 12.000 palabras y 65.000 caracteres.","M"],
+ [SC,"TC16","Puntuación de idiomas latinos: ¡ ¿ º ª « » ° §","A+M"],
+ [SC,"TC17","Símbolos monetarios, matemáticos y legales: € £ ¥ ¢ ± × ≈ ™ ® © „","M"],
+ [SC,"TC18","Puntuación suelta: . , ; ! @ # $ % *","A+M"],
+ [SC,"TC19","Acentos y letra ñ, en el conteo y en Keyword Density.","M"],
+ [SC,"TC20","Comillas y delimitadores: \" ' { } [ ] | < >","M"],
+ [SC,"TC21","Símbolo < pegado, con espacio y con cierre >.","A+M"],
+ [KD,"TC22","Ranking con conteo y porcentaje.","A+M"],
+ [KD,"TC23","Una sola palabra repetida (100%).","A+M"],
+ [KD,"TC24","Orden en caso de empate.","A+M"],
+ [KD,"TC25","Agrupación sin distinguir mayúsculas.","A+M"],
+ [KD,"TC26","Agrupación con puntuación pegada.","A+M"],
+ [KD,"TC27","Números fuera del ranking.","M"],
+ [KD,"TC28","Palabras con apóstrofe y contracciones.","A+M"],
+ [KD,"TC29","Palabras con guion, con y sin acentos, ñ o emojis en el texto.","A+M"],
+ [KD,"TC30","Filtro de palabras comunes por defecto.","M"],
+ [KD,"TC31","Regla de mínimo 2 letras en el ranking.","M"],
+ [KD,"TC32","Panel expandido o colapsado.","A+M"],
+ [KD,"TC33","Consistencia entre Word Count y Keyword Density.","M"]
+];
+var IMPROVE = [
+ {id:"M1",t:"Consistencia entre Word Count y Keyword Density",
+  obs:"Las dos funciones usan criterios distintos para decidir qué es una palabra.",
+  why:"El mismo texto da resultados que no coinciden entre el contador y el ranking.",
+  sug:"Unificar el criterio de palabra en ambas funciones.",
+  list:["Números: Word Count los cuenta, Keyword Density los excluye (F5).","Apóstrofes: `don't` cuenta en Word Count, pero no aparece en Keyword Density (F6).","Guiones: Word Count cuenta `well-known` completa, Keyword Density puede mostrar solo `known` (F7)."],
+  rel:"F5, F6, F7"},
+ {id:"M2",t:"Avisar cuando parte del texto no se cuenta",
+  obs:"Cuando el texto incluye un elemento que el sitio descarta, como `<lorem`, o un símbolo especial que altera el conteo (¡, ¿, °), no aparece ningún aviso. El resultado cambia sin que la persona sepa por qué.",
+  why:"La persona confía en un número que no refleja su texto. En F2, el panel Keyword Density queda vacío y muestra \"Start typing your document...\" aunque sí hay texto.",
+  sug:"Mostrar una caja de aviso tipo tooltip junto al contador o al panel, con la regla que se está aplicando.",
+  ex:"Tu texto incluye \"<lorem\", que no es aceptado. Este elemento no será contado.",
+  rel:"F1, F2"},
+ {id:"M3",t:"Ayuda contextual en los botones del menú",
+  obs:"Los botones del menú no tienen tooltip ni texto de ayuda. THESAURUS aparece bloqueado y no se indica qué hay que hacer para usarlo. La explicación (seleccionar una palabra con el mouse y luego pulsar el botón) solo aparece dentro del panel Options.",
+  why:"La persona no descubre la función, o cree que no funciona.",
+  sug:"Agregar tooltips en todos los botones y, en los deshabilitados, explicar cómo activarlos.",
+  ex:"Selecciona una palabra para ver sinónimos."},
+ {id:"M4",t:"Indicar cuando el contador muestra solo la selección",
+  obs:"Al seleccionar una parte del texto, el contador pasa a mostrar las palabras y caracteres de la selección. Nada en la pantalla lo indica.",
+  why:"Si se selecciona una letra por accidente, el contador muestra \"1 word 1 character\" y parece que el conteo está roto.",
+  sug:"Cambiar la etiqueta mientras haya selección.",
+  ex:"Selección: 3 words 18 characters (de 120 words en total)",
+  ver:"Escribir `lumu illuminates attacks`, seleccionar solo `lumu` y observar el contador."},
+ {id:"M5",t:"Documentar qué cuenta como palabra y como carácter",
+  obs:"El sitio no explica sus reglas de conteo. No indica si cuentan los números, los emojis, las letras sueltas, las palabras con guion o los saltos de línea, ni cómo se cuentan los caracteres (por ejemplo, si un emoji suma 1 o 2).",
+  why:"Sin una regla publicada, el resultado no es predecible y no se puede distinguir un comportamiento esperado de un issue.",
+  sug:"Una sección corta de ayuda, o un ícono de información junto al contador, con la regla de palabra y de carácter.",
+  rel:"F3, F4, F5, M1"},
+ {id:"M6",t:"Mostrar cuántas keywords hay en total",
+  obs:"Keyword Density muestra solo las 10 más usadas, sin indicar que hay más.",
+  why:"Con 15 palabras distintas repetidas 10 veces cada una, se ven 10 y no hay forma de saber que existen otras 5.",
+  sug:"Agregar un texto con el total.",
+  ex:"Mostrando 10 de 15 keywords",
+  ver:"Ingresar 15 palabras distintas repetidas 10 veces cada una y revisar el panel."},
+ {id:"M7",t:"Hacer visible la barra para expandir el cuadro de texto",
+  obs:"La barra que permite expandir el cuadro de texto es prácticamente imperceptible. Sus grises se confunden con el resto de la interfaz y el contraste entre elementos es bajo.",
+  why:"La función existe, pero casi nadie la va a descubrir. Además, si aplicamos las good practices de A11y (accesibilidad), piden un contraste mínimo de diferencia para los componentes de la interfaz.",
+  sug:"Destacar la barra con un ícono de arrastre, un cursor de redimensionar y mayor contraste."}
+];
+var SCOPE = [
+ "Modos x2 y x3 de Keyword Density (se usa x1, por defecto).",
+ "Cambios de configuración del sitio, como \"Include common words in word density count\".",
+ "Pruebas en dispositivos móviles: no estaban en el alcance de esta prueba."
+];
+
+
+/* ---------- Render ---------- */
+(function(){
+  var TYPE = {"A":"Automatizado","M":"Manual","A+M":"Automatizado y Manual"};
+  var AREA_F = {F1:"Word Count",F2:"Keyword Density",F3:"Word Count",F4:"Word Count",F5:"Word Count",F6:"Keyword Density",F7:"Keyword Density"};
+  function areaP(id){ var n=+id.slice(1); return n<=17 ? "Word Count" : "Keyword Density"; }
+  var ICON_OK = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>';
+  var ICON_X = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+  var ICON_INFO = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 7.2v4M8 4.9v.1"/></svg>';
+  var COPY = [];
+
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  function fmt(s){
+    return String(s).split("`").map(function(p,i){
+      return i%2 ? "<code>"+esc(p)+"</code>" : esc(p).replace(/https:\/\/wordcounter\.net\//g,'<a href="https://wordcounter.net/" target="_blank" rel="noopener">https://wordcounter.net/</a>');
+    }).join("");
+  }
+  function badge(pass){ return pass ? '<span class="badge pass">'+ICON_OK+'Passed</span>' : '<span class="badge fail">'+ICON_X+'Failed</span>'; }
+  function tp(t){ return '<span class="tp">'+t.split("+").map(function(x){return '<i class="'+(x==="A"?"ta":"tm")+'">'+TYPE[x]+'</i>';}).join("")+'</span>'; }
+
+  /* Resumen */
+  function donut(p, f){
+    var tot=p+f, r=34, c=2*Math.PI*r, pl=c*p/tot;
+    return '<svg class="donut" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="'+Math.round(100*p/tot)+'% de aprobación">'+
+      '<circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var(--red)" stroke-width="12"/>'+
+      '<circle cx="48" cy="48" r="'+r+'" fill="none" stroke="var(--green)" stroke-width="12" stroke-dasharray="'+pl.toFixed(2)+' '+c.toFixed(2)+'" transform="rotate(-90 48 48)"/>'+
+      '<text x="48" y="47" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">'+Math.round(100*p/tot)+'%</text>'+
+      '<text x="48" y="62" text-anchor="middle" font-size="10" fill="var(--muted)">passed</text></svg>';
+  }
+  function renderSummary(){
+    var p=PASSED.length, f=FAILED.length;
+    var groups=[], by={};
+    COVERAGE.forEach(function(c){ if(!by[c[0]]){by[c[0]]=[];groups.push(c[0]);} by[c[0]].push(c); });
+    var max=Math.max.apply(null, groups.map(function(g){return by[g].length;}));
+    var alto=FAILED.filter(function(x){return x.imp==="Alto";}).length;
+    document.getElementById("summary").innerHTML =
+      '<div class="card"><h3>Resultado del test run: '+(p+f)+' test cases</h3><div class="run">'+donut(p,f)+
+        '<div class="legend"><div><span class="dot" style="background:var(--green)"></span><b>'+p+'</b> Passed</div>'+
+        '<div><span class="dot" style="background:var(--red)"></span><b>'+f+'</b> Failed <span style="color:var(--muted)">('+alto+' alto, '+(f-alto)+' medio)</span></div>'+
+        '<div><span class="dot" style="background:var(--amber-line)"></span><b>'+IMPROVE.length+'</b> Oportunidades de mejora</div></div></div></div>'+
+      '<div class="card"><h3>Cobertura del Test Plan: '+COVERAGE.length+' puntos</h3><div class="areas">'+groups.map(function(g){
+        return '<div class="area"><span>'+esc(g)+'</span><b>'+by[g].length+'</b><div class="track"><i style="width:'+(100*by[g].length/max)+'%;background:var(--blue)"></i></div></div>';
+      }).join("")+'</div></div>'+
+      '<div class="card"><h3>Suite automatizada</h3><p class="big">23 <small>escenarios</small></p>'+
+        '<div class="track" style="height:8px;margin-top:10px" role="img" aria-label="15 aprobados, 8 fallidos"><i style="width:'+(100*15/23)+'%;background:var(--green)"></i><i style="width:'+(100*8/23)+'%;background:var(--red)"></i></div>'+
+        '<div class="legend" style="margin-top:10px;grid-template-columns:1fr 1fr"><div><span class="dot" style="background:var(--green)"></span><b>15</b> Passed</div><div><span class="dot" style="background:var(--red)"></span><b>8</b> Failed</div></div>'+
+        '<p>Cada escenario fallido reproduce automáticamente un issue de este reporte. Los 8 fallidos cubren los 7 issues: F3 tiene 2 escenarios.</p></div>';
+  }
+
+  /* Cobertura */
+  function renderCoverage(){
+    var groups=[], by={};
+    COVERAGE.forEach(function(c){ if(!by[c[0]]){by[c[0]]=[];groups.push(c[0]);} by[c[0]].push(c); });
+    var box=document.getElementById("cov-groups");
+    box.innerHTML = '<div class="ctabs" role="tablist" aria-label="Áreas de cobertura">'+groups.map(function(g,i){
+        return '<button type="button" role="tab" class="ctab" id="ctab-'+i+'" data-ctab="'+i+'" aria-controls="cpanel-'+i+'" aria-selected="'+(i===0)+'" tabindex="'+(i===0?0:-1)+'">'+esc(g)+' <span class="n">'+by[g].length+'</span></button>';
+      }).join("")+'</div>'+
+      groups.map(function(g,i){
+        return '<div class="cpanel" role="tabpanel" id="cpanel-'+i+'" aria-labelledby="ctab-'+i+'"'+(i===0?'':' hidden')+'>'+
+          '<h3 class="cp-print">'+esc(g)+'</h3>'+
+          '<table class="grid cov"><thead><tr><th>ID</th><th>Qué se cubre</th><th class="hide-m">Tipo</th></tr></thead><tbody>'+
+          by[g].map(function(c){ return '<tr><td class="gid">'+c[1]+'</td><td>'+fmt(c[2])+'</td><td class="hide-m w1">'+tp(c[3])+'</td></tr>'; }).join("")+
+          '</tbody></table></div>';
+      }).join("");
+    document.getElementById("scope").innerHTML = SCOPE.map(function(s){return "<li>"+esc(s)+"</li>";}).join("");
+  }
+
+  /* Listas */
+  function renderLists(){
+    document.getElementById("passed-rows").innerHTML = PASSED.map(function(c){
+      return '<tr data-id="'+c.id+'" data-t="'+c.ty+'" data-q="'+esc((c.id+" "+c.t).toLowerCase())+'"><td class="gid">'+c.id+'</td><td><button type="button" class="open" data-open="'+c.id+'">'+esc(c.t)+'</button></td><td class="hide-m muted">'+areaP(c.id)+'</td><td class="hide-m w1">'+tp(c.ty)+'</td><td class="w1">'+badge(true)+'</td></tr>';
+    }).join("") + '<tr class="empty" hidden><td colspan="5">Ningún test case coincide con la búsqueda.</td></tr>';
+    document.getElementById("failed-rows").innerHTML = FAILED.map(function(f){
+      return '<tr data-id="'+f.id+'" data-t="" data-q="'+esc((f.id+" "+f.t).toLowerCase())+'"><td class="gid">'+f.id+'</td><td><button type="button" class="open" data-open="'+f.id+'">'+esc(f.t)+'</button></td><td class="hide-m muted">'+AREA_F[f.id]+'</td><td class="w1"><span class="imp '+f.imp.toLowerCase()+'">'+f.imp+'</span></td><td class="w1">'+badge(false)+'</td></tr>';
+    }).join("") + '<tr class="empty" hidden><td colspan="5">Ningún test case coincide con la búsqueda.</td></tr>';
+  }
+
+  /* Detalle */
+  function terms(list){
+    if(!list) return "";
+    return list.map(function(x){
+      var name = Array.isArray(x) ? x[0] : "Entrada", text = Array.isArray(x) ? x[1] : x;
+      var k = COPY.push(text)-1;
+      return '<div class="term"><div class="term-h"><span>'+esc(name)+'</span><button type="button" class="copy" data-copy="'+k+'">Copiar</button></div><pre>'+esc(text)+'</pre></div>';
+    }).join("");
+  }
+  function steps(s){ return '<ol class="steps">'+s.map(function(x){return "<li>"+fmt(x)+"</li>";}).join("")+'</ol>'; }
+  function reqBlock(req, pre, extra, auto){
+    return '<colgroup><col class="c1"><col><col></colgroup>'+
+      '<tr><th colspan="3">Requirements</th></tr><tr class="req"><td colspan="3">'+
+      '<p><b>Requisito:</b> '+fmt(req)+'</p>'+(extra?'<p>'+fmt(extra)+'</p>':'')+
+      '<p><b>Precondiciones:</b> '+fmt(pre||PRE)+'</p>'+(auto?'<p><b>Escenario automatizado (@knownIssue):</b> '+fmt(auto)+'</p>':'')+
+      '</td></tr><tr class="hdr"><th>How to reproduce</th><th>Expected Results</th><th>Actual Result</th></tr>';
+  }
+  function resCell(txt, pass){
+    return '<td class="act'+(pass?'':' fail')+'" data-h="Actual Result"><div class="res" style="color:'+(pass?'var(--green)':'var(--red)')+'">'+(pass?ICON_OK:ICON_X)+'<span style="color:var(--ink)">'+fmt(txt)+'</span></div></td>';
+  }
+  function note(t){ return t ? '<div class="note">'+ICON_INFO+'<span>'+fmt(t)+'</span></div>' : ""; }
+
+  function detail(id){
+    var c, isF = id.charAt(0)==="F";
+    if(isF){
+      c = FAILED.filter(function(x){return x.id===id;})[0];
+      var rows = c.v.map(function(v){
+        return '<tr><td data-h="How to reproduce"><p class="vlabel">'+v.l+(v.s?' <small>'+esc(v.s)+'</small>':'')+(v.ok?' <span class="ctl">Control</span>':'')+'</p>'+terms(v.in)+steps(v.steps)+'</td>'+
+          '<td class="exp" data-h="Expected Results">'+fmt(v.exp)+'</td>'+resCell(v.act, !!v.ok)+'</tr>';
+      }).join("");
+      return '<div class="dr-title"><h2 id="dr-h">'+esc(c.t)+'</h2></div>'+
+        '<dl class="dr-meta"><div><dt>ID</dt><dd><code>'+c.id+'</code></dd></div><div><dt>Estado</dt><dd>'+badge(false)+'</dd></div><div><dt>Impacto</dt><dd><span class="imp '+c.imp.toLowerCase()+'">'+c.imp+'</span></dd></div><div><dt>Área</dt><dd>'+AREA_F[c.id]+'</dd></div></dl>'+
+        '<table class="tct">'+reqBlock(c.req,null,c.extra,c.auto)+rows+'</table>'+note(c.note);
+    }
+    c = PASSED.filter(function(x){return x.id===id;})[0];
+    return '<div class="dr-title"><h2 id="dr-h">'+esc(c.t)+'</h2></div>'+
+      '<dl class="dr-meta"><div><dt>ID</dt><dd><code>'+c.id+'</code></dd></div><div><dt>Estado</dt><dd>'+badge(true)+'</dd></div><div><dt>Área</dt><dd>'+areaP(c.id)+'</dd></div><div><dt>Tipo</dt><dd>'+tp(c.ty)+'</dd></div></dl>'+
+      '<table class="tct">'+reqBlock(c.req,c.pre)+
+      '<tr><td data-h="How to reproduce">'+terms(c.in)+steps(c.steps)+'</td><td class="exp" data-h="Expected Results">'+fmt(c.exp)+'</td>'+resCell(c.exp,true)+'</tr></table>'+note(c.note);
+  }
+
+  var drawer=document.getElementById("drawer"), backdrop=document.getElementById("backdrop"), current=null;
+  function visibleIds(panel){
+    return Array.prototype.map.call(document.querySelectorAll("#"+panel+" tbody tr[data-id]:not([hidden])"), function(r){return r.dataset.id;});
+  }
+  function panelOf(id){ return id.charAt(0)==="F" ? "failed" : "passed"; }
+  function openDetail(id, fromHash){
+    var panel = panelOf(id);
+    if(!document.querySelector('#'+panel+' tr[data-id="'+id+'"]')) return false;
+    show(panel);
+    current = id;
+    COPY.length = 0;
+    document.getElementById("dr-body").innerHTML = detail(id);
+    document.getElementById("dr-body").scrollTop = 0;
+    document.getElementById("dr-crumb").innerHTML = (panel==="failed"?"Test Cases Failed":"Test Cases Passed")+' / <b>'+id+'</b>';
+    var ids = visibleIds(panel), i = ids.indexOf(id);
+    document.getElementById("dr-prev").disabled = i<=0;
+    document.getElementById("dr-next").disabled = i<0 || i>=ids.length-1;
+    document.querySelectorAll("tr.sel").forEach(function(r){r.classList.remove("sel");});
+    var row = document.querySelector('#'+panel+' tr[data-id="'+id+'"]'); row.classList.add("sel");
+    drawer.hidden = false; backdrop.hidden = false;
+    document.getElementById("dr-close").focus();
+    history.replaceState(null,"","#"+id);
+    return true;
+  }
+  function closeDetail(){
+    if(drawer.hidden) return;
+    drawer.hidden = true; backdrop.hidden = true;
+    var row = current && document.querySelector('tr[data-id="'+current+'"]');
+    if(row){ row.classList.remove("sel"); row.querySelector(".open").focus(); }
+    history.replaceState(null,"","#"+panelOf(current));
+    current = null;
+  }
+  function step(d){
+    if(!current) return;
+    var ids = visibleIds(panelOf(current)), i = ids.indexOf(current)+d;
+    if(i>=0 && i<ids.length) openDetail(ids[i]);
+  }
+
+  /* Pestañas y filtros */
+  var TABS=["coverage","passed","failed","improve"];
+  function show(name, focus){
+    TABS.forEach(function(t){
+      var b=document.getElementById("tab-"+t), on=t===name;
+      b.setAttribute("aria-selected",on); b.tabIndex=on?0:-1;
+      document.getElementById(t).hidden=!on;
+    });
+    if(focus) document.getElementById("tab-"+name).focus();
+  }
+  var filt={passed:{t:"all",q:""},failed:{t:"all",q:""}};
+  function apply(panel){
+    var f=filt[panel], q=f.q.trim().toLowerCase(), n=0;
+    document.querySelectorAll("#"+panel+" tbody tr[data-id]").forEach(function(r){
+      var ok=(f.t==="all"||r.dataset.t.indexOf(f.t)>-1)&&(!q||r.dataset.q.indexOf(q)>-1);
+      r.hidden=!ok; if(ok) n++;
+    });
+    document.querySelector("#"+panel+" tr.empty").hidden = n>0;
+  }
+
+  function route(){
+    var h=location.hash.slice(1);
+    if(TABS.indexOf(h)>-1){ closeDetail(); show(h); return; }
+    if(/^[PF]\d+$/.test(h) && openDetail(h, true)) return;
+    if(/^M\d+$/.test(h) && document.getElementById(h)){ show("improve"); openImprove(h,true); return; }
+    show("coverage");
+  }
+
+  function renderImprove(){
+    document.getElementById("improve-list").innerHTML = IMPROVE.map(function(m){
+      var dd = function(k,v){ return v ? "<dt>"+k+"</dt><dd>"+v+"</dd>" : ""; };
+      return '<div class="mi" id="'+m.id+'"><button type="button" class="mi-h" aria-expanded="false" aria-controls="'+m.id+'-b">'+
+        '<span class="id">'+m.id+'</span><span class="title">'+esc(m.t)+'</span><span class="chev" aria-hidden="true"></span></button>'+
+        '<div class="mi-b" id="'+m.id+'-b" hidden><dl>'+
+          dd("Observación", fmt(m.obs))+
+          dd("Por qué importa", fmt(m.why))+
+          dd("Sugerencia", fmt(m.sug)+(m.ex?'<span class="ex">'+esc(m.ex)+'</span>':'')+(m.list?'<ul>'+m.list.map(function(x){return "<li>"+fmt(x)+"</li>";}).join("")+'</ul>':''))+
+          dd("Cómo verificar", m.ver?fmt(m.ver):"")+
+          dd("Relacionado", m.rel?esc(m.rel):"")+
+        '</dl></div></div>';
+    }).join("");
+  }
+  function openImprove(id, scroll){
+    var el=document.getElementById(id); if(!el) return false;
+    var b=el.querySelector(".mi-h"); b.setAttribute("aria-expanded","true"); document.getElementById(id+"-b").hidden=false;
+    if(scroll) el.scrollIntoView({block:"start"});
+    return true;
+  }
+  function selCov(i, focus){
+    document.querySelectorAll(".ctab").forEach(function(t){
+      var on=+t.dataset.ctab===i;
+      t.setAttribute("aria-selected",on); t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden=!on;
+      if(on&&focus) t.focus();
+    });
+  }
+  document.addEventListener("keydown",function(e){
+    var t=document.activeElement; if(!t||t.dataset.ctab===undefined) return;
+    var n=document.querySelectorAll(".ctab").length, i=+t.dataset.ctab, j=null;
+    if(e.key==="ArrowRight") j=(i+1)%n; else if(e.key==="ArrowLeft") j=(i-1+n)%n; else if(e.key==="Home") j=0; else if(e.key==="End") j=n-1;
+    if(j===null) return; e.preventDefault(); selCov(j,true);
+  });
+  renderSummary(); renderCoverage(); renderLists(); renderImprove();
+  var N={coverage:PASSED.length+FAILED.length,passed:PASSED.length,failed:FAILED.length,improve:IMPROVE.length};
+  document.getElementById("cov-sub").textContent = "Test Plan: "+COVERAGE.length+" puntos cubiertos por "+N.coverage+" test cases ("+N.passed+" passed y "+N.failed+" failed).";
+  document.querySelectorAll("[data-n]").forEach(function(e){e.textContent=N[e.dataset.n];});
+
+  document.addEventListener("click", function(e){
+    var b=e.target.closest("button");
+    if(b){
+      if(b.dataset.ctab!==undefined){ selCov(+b.dataset.ctab,false); return; }
+      if(b.getAttribute("role")==="tab"){ var n=b.id.slice(4); closeDetail(); show(n); history.replaceState(null,"","#"+n); return; }
+      if(b.dataset.open){ openDetail(b.dataset.open); return; }
+      if(b.id==="lg-h"){ var e2=b.getAttribute("aria-expanded")!=="true"; b.setAttribute("aria-expanded",e2); document.getElementById("lg-b").hidden=!e2; document.getElementById("lg-cta").textContent=e2?"Ocultar":"Ver leyenda"; return; }
+      if(b.classList.contains("mi-h")){ var o=b.getAttribute("aria-expanded")!=="true"; b.setAttribute("aria-expanded",o); document.getElementById(b.getAttribute("aria-controls")).hidden=!o; return; }
+      if(b.dataset.copy!==undefined){
+        var text=COPY[+b.dataset.copy];
+        var done=function(){b.textContent="Copiado";b.classList.add("ok");setTimeout(function(){b.textContent="Copiar";b.classList.remove("ok");},1500);};
+        var fb=function(){var t=document.createElement("textarea");t.value=text;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");}catch(x){}document.body.removeChild(t);done();};
+        if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(text).then(done,fb); else fb();
+        return;
+      }
+      if(b.dataset.t){
+        var tools=b.closest("[data-tools]"), p=tools.dataset.tools;
+        filt[p].t=b.dataset.t;
+        tools.querySelectorAll("[data-t]").forEach(function(x){x.setAttribute("aria-pressed",x===b);});
+        apply(p); return;
+      }
+      if(b.id==="dr-close"){ closeDetail(); return; }
+      if(b.id==="dr-prev"){ step(-1); return; }
+      if(b.id==="dr-next"){ step(1); return; }
+      return;
+    }
+    var tr=e.target.closest("tbody tr[data-id]");
+    if(tr && !e.target.closest("a")) openDetail(tr.dataset.id);
+  });
+  backdrop.addEventListener("click", closeDetail);
+  document.querySelectorAll("[data-tools] input").forEach(function(inp){
+    inp.addEventListener("input",function(){ var p=inp.closest("[data-tools]").dataset.tools; filt[p].q=inp.value; apply(p); });
+  });
+  document.addEventListener("keydown", function(e){
+    if(!drawer.hidden){
+      if(e.key==="Escape"){ closeDetail(); return; }
+      if(e.key==="Tab"){
+        var f=drawer.querySelectorAll('button:not([disabled]),a[href]');
+        if(!f.length) return;
+        var first=f[0], last=f[f.length-1];
+        if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+      }
+    }
+  });
+  document.querySelector("[role=tablist]").addEventListener("keydown", function(e){
+    var i=TABS.indexOf(document.activeElement.id.slice(4)); if(i<0) return;
+    var d={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key]; if(!d) return;
+    e.preventDefault(); var n=TABS[(i+d+TABS.length)%TABS.length]; show(n,true); history.replaceState(null,"","#"+n);
+  });
+  var themeBtn=document.getElementById("theme");
+  function syncTheme(){
+    var dark=document.documentElement.getAttribute("data-theme")==="dark";
+    themeBtn.setAttribute("aria-pressed",dark);
+    document.getElementById("theme-l").textContent=dark?"Modo claro":"Modo oscuro";
+    themeBtn.setAttribute("aria-label",dark?"Cambiar a modo claro":"Cambiar a modo oscuro");
+  }
+  themeBtn.addEventListener("click",function(){
+    var next=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
+    document.documentElement.setAttribute("data-theme",next);
+    try{localStorage.setItem("fr-theme",next);}catch(e){}
+    syncTheme();
+  });
+  syncTheme();
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiple Cucumber HTML Reporter</title>
+<link
+  rel="icon"
+  type="image/x-icon"
+  href="./assets/images/logo.png"
+>
+<link rel="stylesheet" href="./styles.min.css">
+
+  <script src="./assets/js/apex-charts.js"></script>
+  <link rel="stylesheet" href="./assets/css/font-awesome.css">
+
+<style>
+  [v-cloak] {
+    display: none;
+  }
+</style>
+
+
+    <script>
+      (function () {
+        const theme =
+          localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <div class="w-full">
+      <!-- Header -->
+      <header class="border-b bg-background px-4 md:px-6 py-4 sticky top-0 z-40 backdrop-blur supports-backdrop-filter:bg-background/60">
+  <div class="mx-auto max-w-7xl flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3 truncate">
+      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 overflow-hidden">
+        
+          <i class="fa-solid fa-vial-circle-check text-xl"></i>
+        
+      </div>
+      <div class="text-balance">
+        <h1 class="text-lg md:text-2xl font-bold text-foreground text-balance tracking-tight">
+          Multiple Cucumber HTML Reporter
+        </h1>
+        <p class="mt-0.5 text-[10px] md:text-xs text-muted-foreground uppercase font-bold tracking-widest opacity-70">
+          Multiple Cucumber HTML Reporter
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="theme-toggle" class="p-2 rounded-md hover:bg-accent transition-colors shrink-0">
+        <svg id="sun-icon" class="hidden h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"/>
+        </svg>
+        <svg id="moon-icon" class="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+
+      <!-- Main Content -->
+      <main class="space-y-6 px-6 py-8">
+        <div class="mx-auto max-w-7xl">
+          
+  <div class="space-y-6">
+    <!-- Run Information Row -->
+    <div class="rounded-xl border bg-card text-card-foreground shadow p-4 md:p-6">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+    <div class="flex flex-wrap items-center gap-6 md:gap-8 flex-1">
+      
+      
+        <div class="flex items-center gap-3 min-w-37.5">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <i class="fa-solid fa-rocket text-sm"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">
+              Project &amp; Release
+            </p>
+            <p class="text-sm font-bold text-foreground truncate">
+              Lumu Exercise 01
+              <span class="text-xs font-medium text-muted-foreground ml-1">v1.0.0</span>
+            </p>
+          </div>
+        </div>
+      
+
+      
+
+      
+
+      
+        <div class="flex items-center gap-3 min-w-30">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <i class="fa-solid fa-server text-sm"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">Environment</p>
+            <p class="text-sm font-bold text-foreground truncate">Local</p>
+          </div>
+        </div>
+      
+
+      
+
+      
+      <div class="flex items-center gap-3 min-w-50">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <i class="fa-solid fa-clock text-sm"></i>
+        </div>
+        <div class="truncate text-xs">
+          <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">Execution Period</p>
+          <div class="font-medium text-foreground flex items-center gap-2">
+            <span>2026/09/28 14:12:12</span>
+            <span class="opacity-40 italic font-normal ml-2">Duration:</span>
+            <span>00:01:02.276</span>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+        <div class="flex items-center gap-3 min-w-30">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <i class="fa-solid fa-user text-sm"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">Username</p>
+            <p class="text-sm font-bold text-foreground truncate">User</p>
+          </div>
+        </div>
+      
+
+      
+        <div class="flex items-center gap-3 min-w-30">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <i class="fa-brands fa-node-js text-sm"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">Node Version</p>
+            <p class="text-sm font-bold text-foreground truncate">v24.19.0</p>
+          </div>
+        </div>
+      
+
+      
+        <div class="flex items-center gap-3 min-w-30">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <i class="fa-solid fa-code-branch text-sm"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">Report Version</p>
+            <p class="text-sm font-bold text-foreground truncate">4.3.0</p>
+          </div>
+        </div>
+      
+
+      
+
+      
+        <div class="flex items-center gap-3 min-w-30">
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <i class="fa-solid fa-microchip text-sm"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">Machine Arch</p>
+            <p class="text-sm font-bold text-foreground truncate">x64</p>
+          </div>
+        </div>
+      
+
+      
+        
+          
+            <div class="flex items-center gap-3 min-w-30">
+              <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <i class="fa-solid fa-circle-info text-sm"></i>
+              </div>
+              <div class="truncate">
+                <p class="text-[9px] text-muted-foreground uppercase font-bold tracking-wider mb-0.5">
+                  executedBy
+                </p>
+                <p class="text-sm font-bold text-foreground truncate">Renato Mattos</p>
+              </div>
+            </div>
+          
+        
+      
+    </div>
+  </div>
+</div>
+
+
+    <!-- Top row - Key metrics status -->
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+        <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Features Status</h3>
+        <div id="features-chart" class="h-64"></div>
+      </div>
+      <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+        <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Scenarios Status</h3>
+        <div id="scenarios-chart" class="h-64"></div>
+      </div>
+      <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+        <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Steps Status</h3>
+        <div id="steps-status-chart" class="h-64"></div>
+      </div>
+    </div>
+
+    <!-- Analytics Charts -->
+    <div class="grid gap-6 lg:grid-cols-3">
+      <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+        <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Device & OS</h3>
+        <div id="device-os-chart" class="h-64"></div>
+      </div>
+      <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+        <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Browsers</h3>
+        <div id="browser-chart" class="h-64"></div>
+      </div>
+      <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+        <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Top 10 Tags</h3>
+        <div id="tag-distribution-chart" class="h-64"></div>
+      </div>
+    </div>
+
+    <!-- Status Trend -->
+    <div class="rounded-xl border bg-card text-card-foreground shadow p-6">
+      <h3 class="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">Features Status Trend</h3>
+      <div id="status-trend-chart" class="h-80 w-full"></div>
+    </div>
+
+    <!-- Features Overview Table -->
+    <div class="rounded-xl border bg-card text-card-foreground shadow overflow-hidden" id="features-table-container">
+  <div class="px-6 py-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <h3 class="text-lg font-semibold whitespace-nowrap">Features Overview</h3>
+    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+      <div class="relative flex-1 md:w-64">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
+          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+        </span>
+        <input
+          type="text"
+          id="feature-search"
+          placeholder="Search features..."
+          class="w-full h-9 pl-9 pr-4 rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-shadow shadow-sm"
+        >
+      </div>
+      <!-- Tag Filter Dropdown -->
+      <div class="relative w-full md:w-56" id="feature-tag-filter-container">
+        <button
+          type="button"
+          id="feature-tag-filter-button"
+          class="flex items-center justify-between w-full h-9 px-3 rounded-md border border-input bg-background text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-shadow shadow-sm cursor-pointer"
+        >
+          <span class="truncate text-muted-foreground text-xs" id="feature-tag-filter-label">Filter by tags...</span>
+          <i class="fa-solid fa-chevron-down text-[10px] text-muted-foreground ml-2"></i>
+        </button>
+        <div
+          id="feature-tag-filter-dropdown"
+          class="hidden absolute left-0 md:left-auto md:right-0 mt-1 w-full md:w-56 rounded-md border border-border bg-card text-card-foreground shadow-md z-50 max-h-60 overflow-y-auto p-1.5 space-y-1"
+        >
+          <!-- Dynamic tag options injected via JS -->
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-medium text-muted-foreground whitespace-nowrap">Show:</span>
+        <select
+          id="records-per-page"
+          class="h-9 px-2 rounded-md border border-input bg-background text-xs ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-shadow shadow-sm min-w-17.5"
+        >
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead class="bg-muted text-muted-foreground uppercase text-xs font-semibold">
+        <tr>
+          <th class="px-4 md:px-6 py-3 cursor-pointer hover:text-foreground transition-colors group">
+            <div class="flex items-center gap-1.5">
+              Feature Name
+              <i class="fa-solid fa-sort opacity-30 group-hover:opacity-100 text-[10px]"></i>
+            </div>
+          </th>
+          <th class="px-4 md:px-6 py-3">Environment</th>
+          <th class="px-4 md:px-6 py-3 cursor-pointer hover:text-foreground transition-colors group">
+            <div class="flex items-center gap-1.5">
+              Steps status
+              <i class="fa-solid fa-sort opacity-30 group-hover:opacity-100 text-[10px]"></i>
+            </div>
+          </th>
+          <th class="px-4 md:px-6 py-3 text-right cursor-pointer hover:text-foreground transition-colors group">
+            <div class="flex items-center justify-end gap-1.5">
+              Pass %
+              <i class="fa-solid fa-sort opacity-30 group-hover:opacity-100 text-[10px]"></i>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="features-table-body" class="divide-y divide-border">
+        
+        
+          <tr class="hover:bg-muted/50 transition-colors">
+            <td class="px-4 md:px-6 py-4 whitespace-nowrap md:whitespace-normal min-w-50">
+              <a href="features/cf79940c-8c3a-4430-bc17-ed449a90e16e-word-counter-validation.html" class="font-medium text-primary hover:underline">
+                Word Counter validation
+              </a>
+              <div class="flex flex-wrap gap-1 mt-1">
+                
+              </div>
+            </td>
+            <td class="px-4 md:px-6 py-4 whitespace-nowrap">
+              
+              
+              
+              
+
+              <div class="flex items-center gap-2.5 text-muted-foreground">
+                
+                <span title="Desktop">
+                  <i
+                    class="fa-solid fa-desktop text-base"
+                  ></i>
+                </span>
+                
+                
+                  <span title="Windows 10">
+                    <i
+                      class="fa-brands fa-windows text-base"
+                    ></i>
+                  </span>
+                
+                
+                
+                  <span title="Chrome (latest)">
+                    <i
+                      class="fa-brands fa-chrome text-base"
+                    ></i>
+                  </span>
+                
+                
+                
+                  <span title="Local machine">
+                    <i class="fa-solid fa-computer text-base"></i>
+                  </span>
+                
+              </div>
+            </td>
+            <td class="px-4 md:px-6 py-4 min-w-60">
+              <div class="flex h-2 w-full overflow-hidden rounded-full bg-secondary">
+                
+                  <div
+                    class="h-full bg-status-passed"
+                    style="width: 65.21739130434783%"
+                  ></div>
+                
+                
+                  <div
+                    class="h-full bg-status-failed"
+                    style="width: 34.78260869565217%"
+                  ></div>
+                
+                
+                
+                
+                
+              </div>
+              <div class="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] font-medium uppercase">
+                <span class="text-status-passed">15 Passed</span>
+                <span class="text-status-failed">8 Failed</span>
+                
+                
+                
+                <span class="text-status-skipped">0 Skipped</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-right">
+              
+              
+                
+              
+              <div class="inline-flex items-center justify-end relative h-12 w-12">
+                <svg class="h-12 w-12 transform -rotate-90">
+                  <circle class="text-muted/20" stroke-width="3" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />
+                  <circle class="text-status-passed transition-all duration-500 ease-out" stroke-width="3"
+                    stroke-dasharray="125.6"
+                    stroke-dashoffset="43.68695652173913"
+                    stroke-linecap="round" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />
+                </svg>
+                <span class="absolute inset-0 flex items-center justify-center text-[10px] font-bold">65.21739130434783%</span
+                >
+              </div>
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div id="no-features-message" class="hidden py-12 text-center bg-muted/20 border-t border-border">
+    <div class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-muted mb-4">
+      <i class="fa-solid fa-magnifying-glass text-muted-foreground"></i>
+    </div>
+    <h4 class="text-sm font-semibold text-foreground">No feature found</h4>
+    <p class="text-xs text-muted-foreground mt-1">Try adjusting your filters or search terms.</p>
+  </div>
+
+  <!-- Pagination -->
+  <div class="px-6 py-4 border-t flex items-center justify-between text-xs text-muted-foreground bg-muted/20">
+    <div>
+      Showing <span id="showing-start" class="font-bold text-foreground">1</span> to
+      <span id="showing-end" class="font-bold text-foreground">10</span> of
+      <span id="total-records" class="font-bold text-foreground">1</span> entries
+    </div>
+    <div class="flex items-center gap-1" id="pagination-controls">
+      <button
+        id="prev-page"
+        disabled
+        class="h-8 w-8 flex items-center justify-center rounded border border-transparent text-foreground hover:bg-muted hover:border-border transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <div id="page-numbers" class="flex items-center gap-1">
+        <!-- Page buttons will be injected here -->
+      </div>
+      <button
+        id="next-page"
+        
+          disabled
+        
+        class="h-8 w-8 flex items-center justify-center rounded border border-transparent text-foreground hover:bg-muted hover:border-border transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <script>
+    // Report-wide UI config (opt-in features toggled from the reporter options)
+    window.ReportConfig = Object.assign({}, window.ReportConfig, {
+        displayChartPercentages: false,
+        modalBackdrop: true,
+        modalDraggable: false,
+        modalResizable: false,
+        modalShowContext: false
+    });
+
+    // Embedded data for charts
+    const chartData = {
+        summary: {"ambiguous":0,"failed":1,"passed":0,"notDefined":0,"pending":0,"skipped":0,"total":1,"ambiguousPercentage":"0.00","failedPercentage":"100.00","notDefinedPercentage":"0.00","pendingPercentage":"0.00","skippedPercentage":"0.00","passedPercentage":"0.00","steps":{"passed":0,"failed":0,"skipped":0,"total":0}},
+        scenarios: {"failed":8,"ambiguous":0,"notDefined":0,"pending":0,"skipped":0,"passed":15,"total":23,"ambiguousPercentage":"0.00","failedPercentage":"34.78","notDefinedPercentage":"0.00","passedPercentage":"65.22","pendingPercentage":"0.00","skippedPercentage":"0.00"},
+        features: [{"description":"  As a user of wordcounter.net\n  I want the tool to correctly count words and characters\n  So that I can trust the results","elements":[{"description":"","id":"word-counter-validation;validate-initial-word-and-character-count-is-zero-on-page-load","keyword":"Scenario","line":38,"name":"Validate initial word and character count is zero on page load","steps":[{"result":{"status":"passed","duration":2665000000},"arguments":[],"keyword":"Given ","line":39,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:02.665"},{"result":{"status":"passed","duration":18000000},"arguments":[],"keyword":"Then ","line":40,"name":"the word count should display \"0\"","match":{"location":"not available:0"},"time":"00:00:00.018"},{"result":{"status":"passed","duration":14000000},"arguments":[],"keyword":"And ","line":41,"name":"the character count should display \"0\"","match":{"location":"not available:0"},"time":"00:00:00.014"}],"tags":[{"name":"@sanity","line":37},{"name":"@wordCount","line":37},{"name":"@fullRegression","line":37}],"type":"scenario","duration":2.697,"time":"00:00:02.697","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-word-count-for-a-simple-sentence","keyword":"Scenario","line":44,"name":"Validate word count for a simple sentence","steps":[{"result":{"status":"passed","duration":810000000},"arguments":[],"keyword":"Given ","line":45,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.810"},{"result":{"status":"passed","duration":218000000},"arguments":[],"keyword":"When ","line":46,"name":"I enter the text \"lumu illuminates attacks and adversaries\"","match":{"location":"not available:0"},"time":"00:00:00.218"},{"result":{"status":"passed","duration":135000000},"arguments":[],"keyword":"Then ","line":47,"name":"the word and character count should display \"5\" words and \"40\" characters","match":{"location":"not available:0"},"time":"00:00:00.135"}],"tags":[{"name":"@sanity","line":43},{"name":"@wordCount","line":43},{"name":"@fullRegression","line":43}],"type":"scenario","duration":1.163,"time":"00:00:01.163","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-whitespace-only-text-counts-characters-but-not-words","keyword":"Scenario","line":50,"name":"Validate whitespace-only text counts characters but not words","steps":[{"result":{"status":"passed","duration":864000000},"arguments":[],"keyword":"Given ","line":51,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.864"},{"result":{"status":"passed","duration":213000000},"arguments":[],"keyword":"When ","line":52,"name":"I enter the text \"     \"","match":{"location":"not available:0"},"time":"00:00:00.213"},{"result":{"status":"passed","duration":142000000},"arguments":[],"keyword":"Then ","line":53,"name":"the word and character count should display \"0\" words and \"5\" characters","match":{"location":"not available:0"},"time":"00:00:00.142"}],"tags":[{"name":"@sanity","line":49},{"name":"@wordCount","line":49},{"name":"@fullRegression","line":49}],"type":"scenario","duration":1.219,"time":"00:00:01.219","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-multiple-spaces-between-words","keyword":"Scenario","line":56,"name":"Validate multiple spaces between words","steps":[{"result":{"status":"passed","duration":608000000},"arguments":[],"keyword":"Given ","line":57,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.608"},{"result":{"status":"passed","duration":224000000},"arguments":[],"keyword":"When ","line":58,"name":"I enter the text \"lumu           lumu\"","match":{"location":"not available:0"},"time":"00:00:00.224"},{"result":{"status":"passed","duration":148000000},"arguments":[],"keyword":"Then ","line":59,"name":"the word and character count should display \"2\" words and \"19\" characters","match":{"location":"not available:0"},"time":"00:00:00.148"}],"tags":[{"name":"@sanity","line":55},{"name":"@wordCount","line":55},{"name":"@fullRegression","line":55}],"type":"scenario","duration":0.98,"time":"00:00:00.980","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-line-breaks-are-not-counted-as-words-or-characters","keyword":"Scenario","line":62,"name":"Validate line breaks are not counted as words or characters","steps":[{"result":{"status":"passed","duration":858000000},"arguments":[],"keyword":"Given ","line":63,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.858"},{"result":{"status":"passed","duration":201000000},"arguments":[],"keyword":"When ","line":64,"name":"I enter the text with line breaks","match":{"location":"not available:0"},"time":"00:00:00.201"},{"result":{"status":"passed","duration":18000000},"arguments":[],"keyword":"Then ","line":65,"name":"the word and character count should display \"0\" words and \"0\" characters","match":{"location":"not available:0"},"time":"00:00:00.018"}],"tags":[{"name":"@sanity","line":61},{"name":"@wordCount","line":61},{"name":"@fullRegression","line":61}],"type":"scenario","duration":1.077,"time":"00:00:01.077","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-punctuation-attached-to-words-does-not-create-new-words","keyword":"Scenario","line":68,"name":"Validate punctuation attached to words does not create new words","steps":[{"result":{"status":"passed","duration":2090000000},"arguments":[],"keyword":"Given ","line":69,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:02.090"},{"result":{"status":"passed","duration":294000000},"arguments":[],"keyword":"When ","line":70,"name":"I enter the text \"lumu, lumu.\"","match":{"location":"not available:0"},"time":"00:00:00.294"},{"result":{"status":"passed","duration":134000000},"arguments":[],"keyword":"Then ","line":71,"name":"the word and character count should display \"2\" words and \"11\" characters","match":{"location":"not available:0"},"time":"00:00:00.134"}],"tags":[{"name":"@sanity","line":67},{"name":"@wordCount","line":67},{"name":"@fullRegression","line":67}],"type":"scenario","duration":2.518,"time":"00:00:02.518","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-words-with-apostrophes-count-as-a-single-word","keyword":"Scenario","line":74,"name":"Validate words with apostrophes count as a single word","steps":[{"result":{"status":"passed","duration":595000000},"arguments":[],"keyword":"Given ","line":75,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.595"},{"result":{"status":"passed","duration":202000000},"arguments":[],"keyword":"When ","line":76,"name":"I enter the text \"don't stop\"","match":{"location":"not available:0"},"time":"00:00:00.202"},{"result":{"status":"passed","duration":161000000},"arguments":[],"keyword":"Then ","line":77,"name":"the word and character count should display \"2\" words and \"10\" characters","match":{"location":"not available:0"},"time":"00:00:00.161"}],"tags":[{"name":"@sanity","line":73},{"name":"@wordCount","line":73},{"name":"@fullRegression","line":73}],"type":"scenario","duration":0.958,"time":"00:00:00.958","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-hyphenated-words-count-as-single-word","keyword":"Scenario","line":80,"name":"Validate hyphenated words count as single word","steps":[{"result":{"status":"passed","duration":933000000},"arguments":[],"keyword":"Given ","line":81,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.933"},{"result":{"status":"passed","duration":229000000},"arguments":[],"keyword":"When ","line":82,"name":"I enter the text \"well-known test\"","match":{"location":"not available:0"},"time":"00:00:00.229"},{"result":{"status":"passed","duration":123000000},"arguments":[],"keyword":"Then ","line":83,"name":"the word and character count should display \"2\" words and \"15\" characters","match":{"location":"not available:0"},"time":"00:00:00.123"}],"tags":[{"name":"@sanity","line":79},{"name":"@wordCount","line":79},{"name":"@fullRegression","line":79}],"type":"scenario","duration":1.285,"time":"00:00:01.285","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-word-and-character-count-updates-correctly-when-current-text-is-updated-on-same-session","keyword":"Scenario","line":86,"name":"Validate word and character count updates correctly when current text is updated on same session","steps":[{"result":{"status":"passed","duration":581000000},"arguments":[],"keyword":"Given ","line":87,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.581"},{"result":{"status":"passed","duration":235000000},"arguments":[],"keyword":"When ","line":88,"name":"I enter the text \"Lorem ipsum dolor sit amet\"","match":{"location":"not available:0"},"time":"00:00:00.235"},{"result":{"status":"passed","duration":120000000},"arguments":[],"keyword":"Then ","line":89,"name":"the word and character count should display \"5\" words and \"26\" characters","match":{"location":"not available:0"},"time":"00:00:00.120"},{"result":{"status":"passed","duration":137000000},"arguments":[],"keyword":"When ","line":90,"name":"I enter the text \"Lorem ipsum dolor \"","match":{"location":"not available:0"},"time":"00:00:00.137"},{"result":{"status":"passed","duration":14000000},"arguments":[],"keyword":"Then ","line":91,"name":"the word and character count should display \"3\" words and \"18\" characters","match":{"location":"not available:0"},"time":"00:00:00.014"}],"tags":[{"name":"@sanity","line":85},{"name":"@wordCount","line":85},{"name":"@fullRegression","line":85}],"type":"scenario","duration":1.087,"time":"00:00:01.087","passed":5,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-keyword-density-for-a-repeated-text","keyword":"Scenario","line":96,"name":"Validate keyword density for a repeated text","steps":[{"result":{"status":"passed","duration":1109000000},"arguments":[],"keyword":"Given ","line":97,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:01.109"},{"result":{"status":"passed","duration":346000000},"arguments":[],"keyword":"When ","line":98,"name":"I enter the text \"lumu lumu lumu lumu lumu illuminates illuminates attacks and adversaries lumu illuminates all attacks and adversaries\"","match":{"location":"not available:0"},"time":"00:00:00.346"},{"result":{"status":"passed","duration":164000000},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["lumu","6"]},{"cells":["illuminates","3"]},{"cells":["attacks","2"]}]}],"keyword":"Then ","line":99,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"time":"00:00:00.164"}],"tags":[{"name":"@sanity","line":95},{"name":"@keywordDensity","line":95},{"name":"@fullRegression","line":95}],"type":"scenario","duration":1.619,"time":"00:00:01.619","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-keyword-density-shows-100-percent-for-a-single-repeated-word","keyword":"Scenario","line":106,"name":"Validate keyword density shows 100 percent for a single repeated word","steps":[{"result":{"status":"passed","duration":1377000000},"arguments":[],"keyword":"Given ","line":107,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:01.377"},{"result":{"status":"passed","duration":302000000},"arguments":[],"keyword":"When ","line":108,"name":"I enter the text \"lumu lumu lumu lumu\"","match":{"location":"not available:0"},"time":"00:00:00.302"},{"result":{"status":"passed","duration":114000000},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["lumu","4"]}]}],"keyword":"Then ","line":109,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"time":"00:00:00.114"}],"tags":[{"name":"@sanity","line":105},{"name":"@keywordDensity","line":105},{"name":"@fullRegression","line":105}],"type":"scenario","duration":1.793,"time":"00:00:01.793","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-keyword-density-input-order","keyword":"Scenario","line":114,"name":"Validate keyword density input order","steps":[{"result":{"status":"passed","duration":539000000},"arguments":[],"keyword":"Given ","line":115,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.539"},{"result":{"status":"passed","duration":198000000},"arguments":[],"keyword":"When ","line":116,"name":"I enter the text \"zebra apple zebra apple\"","match":{"location":"not available:0"},"time":"00:00:00.198"},{"result":{"status":"passed","duration":410000000},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["zebra","2"]},{"cells":["apple","2"]}]}],"keyword":"Then ","line":117,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"time":"00:00:00.410"}],"tags":[{"name":"@keywordDensity","line":113},{"name":"@fullRegression","line":113}],"type":"scenario","duration":1.147,"time":"00:00:01.147","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-keyword-density-case-sensitive","keyword":"Scenario","line":123,"name":"Validate keyword density case sensitive","steps":[{"result":{"status":"passed","duration":577000000},"arguments":[],"keyword":"Given ","line":124,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.577"},{"result":{"status":"passed","duration":258000000},"arguments":[],"keyword":"When ","line":125,"name":"I enter the text \"Lumu lumu LUMU illuminates\"","match":{"location":"not available:0"},"time":"00:00:00.258"},{"result":{"status":"passed","duration":152000000},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["lumu","3"]},{"cells":["illuminates","1"]}]}],"keyword":"Then ","line":126,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"time":"00:00:00.152"}],"tags":[{"name":"@sanity","line":122},{"name":"@keywordDensity","line":122},{"name":"@fullRegression","line":122}],"type":"scenario","duration":0.987,"time":"00:00:00.987","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-keyword-density-agrupation-with-attached-punctuation","keyword":"Scenario","line":132,"name":"Validate keyword density agrupation with attached punctuation","steps":[{"result":{"status":"passed","duration":735000000},"arguments":[],"keyword":"Given ","line":133,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.735"},{"result":{"status":"passed","duration":210000000},"arguments":[],"keyword":"When ","line":134,"name":"I enter the text \"lumu, lumu.\"","match":{"location":"not available:0"},"time":"00:00:00.210"},{"result":{"status":"passed","duration":153000000},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["lumu","2"]}]}],"keyword":"Then ","line":135,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"time":"00:00:00.153"}],"tags":[{"name":"@keywordDensity","line":131},{"name":"@fullRegression","line":131}],"type":"scenario","duration":1.098,"time":"00:00:01.098","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-numbers-do-not-appear-in-keyword-density","keyword":"Scenario","line":140,"name":"Validate numbers do not appear in keyword density","steps":[{"result":{"status":"passed","duration":572000000},"arguments":[],"keyword":"Given ","line":141,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.572"},{"result":{"status":"passed","duration":249000000},"arguments":[],"keyword":"When ","line":142,"name":"I enter the text \"123 123 123 lumu\"","match":{"location":"not available:0"},"time":"00:00:00.249"},{"result":{"status":"passed","duration":157000000},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["lumu","1"]}]}],"keyword":"Then ","line":143,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"time":"00:00:00.157"}],"tags":[{"name":"@sanity","line":139},{"name":"@keywordDensity","line":139},{"name":"@fullRegression","line":139}],"type":"scenario","duration":0.978,"time":"00:00:00.978","passed":3,"failed":0,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-single-letter-should-not-count-as-a-word","keyword":"Scenario","line":150,"name":"Validate single letter should NOT count as a word","steps":[{"result":{"status":"passed","duration":909000000},"arguments":[],"keyword":"Given ","line":151,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.909"},{"result":{"status":"passed","duration":215000000},"arguments":[],"keyword":"When ","line":152,"name":"I enter the text \"e\"","match":{"location":"not available:0"},"time":"00:00:00.215"},{"result":{"status":"failed","duration":4187000000,"error_message":"Timed out retrying after 4000ms: expected '1' to equal '0'"},"arguments":[],"keyword":"Then ","line":153,"name":"the word and character count should display \"0\" words and \"1\" characters","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.187"}],"tags":[{"name":"@knownIssue","line":149},{"name":"@fullRegression","line":149}],"type":"scenario","duration":5.311,"time":"00:00:05.311","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-single-letter-with-punctuation-should-not-count-as-a-word","keyword":"Scenario","line":156,"name":"Validate single letter with punctuation should NOT count as a word","steps":[{"result":{"status":"passed","duration":813000000},"arguments":[],"keyword":"Given ","line":157,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.813"},{"result":{"status":"passed","duration":213000000},"arguments":[],"keyword":"When ","line":158,"name":"I enter the text \"e,\"","match":{"location":"not available:0"},"time":"00:00:00.213"},{"result":{"status":"failed","duration":4173000000,"error_message":"Timed out retrying after 4000ms: expected '1' to equal '0'"},"arguments":[],"keyword":"Then ","line":159,"name":"the word and character count should display \"0\" words and \"2\" characters","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.173"}],"tags":[{"name":"@knownIssue","line":155},{"name":"@fullRegression","line":155}],"type":"scenario","duration":5.199,"time":"00:00:05.199","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-emoji-should-not-count-as-a-word","keyword":"Scenario","line":162,"name":"Validate emoji should NOT count as a word","steps":[{"result":{"status":"passed","duration":557000000},"arguments":[],"keyword":"Given ","line":163,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.557"},{"result":{"status":"passed","duration":282000000},"arguments":[],"keyword":"When ","line":164,"name":"I enter the text \"lumu 😀 illuminates\"","match":{"location":"not available:0"},"time":"00:00:00.282"},{"result":{"status":"failed","duration":4125000000,"error_message":"Timed out retrying after 4000ms: expected '3' to equal '2'"},"arguments":[],"keyword":"Then ","line":165,"name":"the word and character count should display \"2\" words and \"19\" characters","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.125"}],"tags":[{"name":"@knownIssue","line":161},{"name":"@fullRegression","line":161}],"type":"scenario","duration":4.964,"time":"00:00:04.964","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-numbers-should-not-count-as-a-word","keyword":"Scenario","line":168,"name":"Validate numbers should NOT count as a word","steps":[{"result":{"status":"passed","duration":525000000},"arguments":[],"keyword":"Given ","line":169,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.525"},{"result":{"status":"passed","duration":209000000},"arguments":[],"keyword":"When ","line":170,"name":"I enter the text \"lumu 123 illuminates\"","match":{"location":"not available:0"},"time":"00:00:00.209"},{"result":{"status":"failed","duration":4116000000,"error_message":"Timed out retrying after 4000ms: expected '3' to equal '2'"},"arguments":[],"keyword":"Then ","line":171,"name":"the word and character count should display \"2\" words and \"20\" characters","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.116"}],"tags":[{"name":"@knownIssue","line":167},{"name":"@fullRegression","line":167}],"type":"scenario","duration":4.85,"time":"00:00:04.850","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-words-with-apostrophes-should-appear-in-keyword-density","keyword":"Scenario","line":174,"name":"Validate words with apostrophes should appear in keyword density","steps":[{"result":{"status":"passed","duration":636000000},"arguments":[],"keyword":"Given ","line":175,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.636"},{"result":{"status":"passed","duration":206000000},"arguments":[],"keyword":"When ","line":176,"name":"I enter the text \"don't don't stop\"","match":{"location":"not available:0"},"time":"00:00:00.206"},{"result":{"status":"failed","duration":4507000000,"error_message":"Timed out retrying after 4000ms: expected '<a.list-group-item>' to have a length at least 2 but got 1"},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["don't","2"]},{"cells":["stop","1"]}]}],"keyword":"Then ","line":177,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.507"}],"tags":[{"name":"@knownIssue","line":173},{"name":"@fullRegression","line":173}],"type":"scenario","duration":5.349,"time":"00:00:05.349","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-hyphenated-word-does-not-lose-its-first-part-in-keyword-density","keyword":"Scenario","line":183,"name":"Validate hyphenated word does not lose its first part in keyword density","steps":[{"result":{"status":"passed","duration":922000000},"arguments":[],"keyword":"Given ","line":184,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.922"},{"result":{"status":"passed","duration":240000000},"arguments":[],"keyword":"When ","line":185,"name":"I enter the text \"well-known well-known niño\"","match":{"location":"not available:0"},"time":"00:00:00.240"},{"result":{"status":"failed","duration":4256000000,"error_message":"Timed out retrying after 4000ms: Expected to find content: 'well-known' within the element: <a.list-group-item> and with the selector: '.word' but never did."},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["well-known","2"]},{"cells":["niño","1"]}]}],"keyword":"Then ","line":186,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.256"}],"tags":[{"name":"@knownIssue","line":182},{"name":"@fullRegression","line":182}],"type":"scenario","duration":5.418,"time":"00:00:05.418","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-word-attached-to-less-than-symbol-breaks-keyword-density-completely","keyword":"Scenario","line":192,"name":"Validate word attached to less-than symbol breaks keyword density completely","steps":[{"result":{"status":"passed","duration":600000000},"arguments":[],"keyword":"Given ","line":193,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:00.600"},{"result":{"status":"passed","duration":373000000},"arguments":[],"keyword":"When ","line":194,"name":"I enter the text \"<lorem ipsum dolor\"","match":{"location":"not available:0"},"time":"00:00:00.373"},{"result":{"status":"failed","duration":4174000000,"error_message":"Timed out retrying after 4000ms: Expected to find element: `#kwd-accordion-data a.list-group-item`, but never found it."},"arguments":[{"rows":[{"cells":["word","count"]},{"cells":["lorem","1"]},{"cells":["ipsum","1"]},{"cells":["dolor","1"]}]}],"keyword":"Then ","line":195,"name":"the keyword density should show the following words and counts:","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.174"}],"tags":[{"name":"@knownIssue","line":191},{"name":"@fullRegression","line":191}],"type":"scenario","duration":5.147,"time":"00:00:05.147","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0},{"description":"","id":"word-counter-validation;validate-special-characters-do-not-break-word-tokenization","keyword":"Scenario","line":202,"name":"Validate special characters do not break word tokenization","steps":[{"result":{"status":"passed","duration":1033000000},"arguments":[],"keyword":"Given ","line":203,"name":"I am on the wordcounter.net homepage","match":{"location":"not available:0"},"time":"00:00:01.033"},{"result":{"status":"passed","duration":272000000},"arguments":[],"keyword":"When ","line":204,"name":"I enter the text \"¿Hola? ¡Test! 90° . , ! @ # $ *\"","match":{"location":"not available:0"},"time":"00:00:00.272"},{"result":{"status":"failed","duration":4127000000,"error_message":"Timed out retrying after 4000ms: expected '10' to equal '3'"},"arguments":[],"keyword":"Then ","line":205,"name":"the word and character count should display \"3\" words and \"31\" characters","match":{"location":"not available:0"},"embeddings":[{}],"attachments":[],"image":["data:image/png;base64,"],"imageNames":[null],"time":"00:00:04.127"}],"tags":[{"name":"@knownIssue","line":201},{"name":"@fullRegression","line":201}],"type":"scenario","duration":5.432,"time":"00:00:05.432","passed":2,"failed":1,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0}],"id":"cf79940c-8c3a-4430-bc17-ed449a90e16e-word-counter-validation","line":29,"keyword":"Feature","name":"Word Counter validation","tags":[],"uri":"cypress\\e2e\\features\\wordCounter.feature","metadata":[{"name":"Username","value":"Renato Mattos"},{"name":"Browser","value":"Chrome (latest)"},{"name":"Platform","value":"Windows 10"}],"scenarios":{"passed":15,"failed":8,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0,"passedPercentage":"65.22","failedPercentage":"34.78","notDefinedPercentage":"0.00","skippedPercentage":"0.00","pendingPercentage":"0.00","ambiguousPercentage":"0.00","total":23},"duration":62276000000,"time":"00:01:02.276","isFailed":true,"isAmbiguous":false,"isSkipped":false,"isNotdefined":false,"isPending":false,"passed":15,"failed":8,"notDefined":0,"skipped":0,"pending":0,"ambiguous":0,"totalTime":62276000000,"app":"","browser":"Chrome (latest)","username":"Renato Mattos","os":"Windows 10"}]
+    };
+  </script>
+
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="border-t bg-background px-6 py-4 mt-8">
+  <div class="mx-auto max-w-7xl text-center">
+    
+      <p class="text-xs text-muted-foreground">
+        Generated by
+        <a
+          href="https://github.com/WasiqB/multiple-cucumber-html-reporter"
+          target="_blank"
+          class="text-primary hover:underline"
+          >Multiple Cucumber HTML Reporter</a
+        >
+      </p>
+      <p class="text-xs text-muted-foreground mt-2">
+        Built with ❤️ by
+        <a href="https://wasiqbhamla.com/" target="_blank" class="text-primary hover:underline font-semibold"
+          >Wasiq Bhamla</a
+        >
+        <span class="mx-1.5 text-muted-foreground/50">•</span>
+        <a
+          href="https://github.com/WasiqB"
+          target="_blank"
+          class="text-muted-foreground hover:text-primary transition-colors"
+          ><i class="fa-brands fa-github mr-0.5"></i
+        ></a>
+        <span class="mx-1.5 text-muted-foreground/50">•</span>
+        <a
+          href="https://x.com/WasiqBhamla"
+          target="_blank"
+          class="text-muted-foreground hover:text-primary transition-colors"
+          ><i class="fa-brands fa-x-twitter mr-0.5"></i
+        ></a>
+        <span class="mx-1.5 text-muted-foreground/50">•</span>
+        <a
+          href="https://www.linkedin.com/in/wasiqbhamla/"
+          target="_blank"
+          class="text-muted-foreground hover:text-primary transition-colors"
+          ><i class="fa-brands fa-linkedin mr-0.5"></i
+        ></a>
+      </p>
+    
+  </div>
+</footer>
+
+    </div>
+
+    <!-- Media Modal -->
+    
+
+
+
+
+  <div
+    id="media-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
+    onclick="closeModal()"
+  >
+    <div
+      class="relative w-full max-w-4xl max-h-[90vh] bg-background rounded-lg shadow-lg flex flex-col overflow-hidden"
+      onclick="event.stopPropagation()"
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b p-4 text-card-foreground">
+        <h2 id="modal-title" class="text-lg font-semibold truncate mr-4">Attachment</h2>
+        <button onclick="closeModal()" class="rounded-lg p-1 hover:bg-muted transition-colors">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div id="modal-content" class="overflow-auto flex-1 p-4 bg-muted/10">
+        <!-- Content will be injected here -->
+      </div>
+    </div>
+  </div>
+
+
+
+    <script src="./scripts/utils.js"></script>
+<script src="./scripts/theme.js"></script>
+<script src="./scripts/modal.js"></script>
+<script src="./scripts/charts.js"></script>
+<script src="./scripts/table.js"></script>
+<script src="./scripts/scenarios.js"></script>
+<script src="./scripts/main.js"></script>
+
+
+  </body>
+</html>
